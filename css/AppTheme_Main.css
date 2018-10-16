@@ -1,0 +1,12 @@
+/*
+    Application custom theme
+*/
+
+/* btn default uppercase text override */
+.btn {
+    text-transform: none !important;
+}
+
+.headerNav{
+    background-color: rbg( 48, 151, 209 ) !important;
+}
