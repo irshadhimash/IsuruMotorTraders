@@ -1,7 +1,10 @@
 
 <?php
 
+session_start();
+
 require($_SERVER['DOCUMENT_ROOT'].'/IsuruMotorTraders/models/LoginModel.php');
+require('SessionValidatorController.php');
 
 class LoginController extends LoginModel{
 
@@ -11,6 +14,7 @@ class LoginController extends LoginModel{
 	private $password_err = "";
 	private $user = array();
 
+	/*
 	function validateLoginState(){
 
 		if( isset($_SESSION['IsLoggedIn']) && $_SESSION['IsLoggedIn'] == true ){
@@ -24,6 +28,7 @@ class LoginController extends LoginModel{
 	function redirectToHome(){
 		header('location:home.php');
 	}
+	*/
 
 	function verify(){
 
@@ -70,7 +75,6 @@ class LoginController extends LoginModel{
 
 	function signIn(){
 		
-		session_start();
 		$_SESSION['UserID'] = $this->user['UserId'];
 		$_SESSION['Username'] = $this->user['Username'];
 		$_SESSION['PreferedName'] = $this->user['PreferedName'];
@@ -82,7 +86,10 @@ class LoginController extends LoginModel{
 
 }
 
-$loginObj = new LoginController;
-$loginObj->validateLoginState();
+//$loginObj = new LoginController;
+//$loginObj->validateLoginState();
+
+$sessionValidator = new SessionValidator;
+$sessionValidator->validateLoginState();
 
 ?>
