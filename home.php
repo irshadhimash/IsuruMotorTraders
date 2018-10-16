@@ -39,21 +39,21 @@
         <div class="row row flex-xl-nowrap">
             <div class="col-lg-4">
                 <a href="#">
-                    <img class="rounded-circle" src="images/appicons/customer.png" alt="Generic placeholder image" width="180" height="180">
+                    <img class="square" src="images/appicons/customer.png" alt="Generic placeholder image" width="180" height="180">
                 </a>
                 <h2>Customers</h2>
                 <p>View and manage your list of customers.</p>
             </div>
             <div class="col-lg-4">
                 <a href="#">
-                    <img class="rounded-circle" src="images/appicons/trader.png" alt="Generic placeholder image" width="180" height="180">
+                    <img class="square" src="images/appicons/trader.png" alt="Generic placeholder image" width="180" height="180">
                 </a>
                 <h2>Traders</h2>
                 <p>View and manage your list of traders.</p>
             </div>
             <div class="col-lg-4">
                 <a href="#">
-                    <img class="rounded-circle" src="images/appicons/inventory.png" alt="Generic placeholder image" width="180" height="180">
+                    <img class="square" src="images/appicons/inventory.png" alt="Generic placeholder image" width="180" height="180">
                 </a>
                 <h2>Inventory</h2>
                 <p>View and manage your inventory.</p>
@@ -62,21 +62,21 @@
         <div class="row">
             <div class="col-lg-4">
                 <a href="#">
-                    <img class="rounded-circle" src="images/appicons/sale.png" alt="Generic placeholder image" width="180" height="180">
+                    <img class="square" src="images/appicons/sale.png" alt="Generic placeholder image" width="180" height="180">
                 </a>
                 <h2>Sales Portal</h2>
                 <p>View and manage your sales.</p>
             </div>
             <div class="col-lg-4">
                 <a href="#">
-                    <img class="rounded-circle" src="images/appicons/money.png" alt="Generic placeholder image" width="180" height="180">
+                    <img class="square" src="images/appicons/money.png" alt="Generic placeholder image" width="180" height="180">
                 </a>
                 <h2>Revenue Portal</h2>
                 <p>View and manage your costs, revenue and profit.</p>
             </div>
             <div class="col-lg-4">
                 <a href="#">
-                    <img class="rounded-circle" src="images/appicons/finance.png" alt="Generic placeholder image" width="180" height="180">
+                    <img class="square" src="images/appicons/finance.png" alt="Generic placeholder image" width="180" height="180">
                 </a>
                 <h2>Installment Payments</h2>
                 <p>View and manage your installment based payments.</p>
