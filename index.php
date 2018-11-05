@@ -1,6 +1,8 @@
 
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
 
 	<meta charset="utf-8">
@@ -51,9 +53,17 @@
 				</span>
 				<a href="#" class="link" onclick="return openModal()" >
 					<span> Forgot password?</span>
-					<!--<button>Forgot Password?</button>-->
 				</a>
 			</div>
+		</div>
+		<div class="row">
+			<span style="color:white !important;">
+				Ready to trade in your vehicle?
+				<a href="TraderSignUp.php" class="link" onclick="return openModal()" >
+					<span> Sign up </span>
+				</a>
+				here!
+				</span>
 		</div>
 	</form>
 

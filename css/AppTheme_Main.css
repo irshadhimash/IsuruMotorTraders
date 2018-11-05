@@ -10,3 +10,7 @@
 .headerNav{
     background-color: rbg( 48, 151, 209 ) !important;
 }
+
+.bg-blue {
+    background: #2c6ed5;
+}
