@@ -59,7 +59,7 @@
 		<div class="row">
 			<span style="color:white !important;">
 				Ready to trade in your vehicle?
-				<a href="TraderSignUp.php" class="link" onclick="return openModal()" >
+				<a href="TraderSignUp.php" class="link">
 					<span> Sign up </span>
 				</a>
 				here!
