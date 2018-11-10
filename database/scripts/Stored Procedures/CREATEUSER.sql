@@ -1,0 +1,17 @@
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `CREATEUSER` $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CREATEUSER`(
+    IN `username` CHAR(50)
+)
+BEGIN
+
+DECLARE RecCount INT;
+
+SET @RecCount = SELECT COUNT(*) FROM systemuser WHERE USERNAME = username;
+
+IF RecCount = 1 THEN
+	SELECT 'Success'
+
+DELIMITER ;

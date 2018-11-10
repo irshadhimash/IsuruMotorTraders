@@ -7,10 +7,10 @@
 
 	<meta charset="utf-8">
 
-	 <!-- Compiled and minified CSS -->
-	 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
-	 <!-- Main App Style -->
-	 <link rel="stylesheet" href="css/AppTheme_Main.css">
+	<!-- Compiled and minified CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+	<!-- Main App Style -->
+	<link rel="stylesheet" href="css/AppTheme_Main.css">
 	<!--Import Google Icon Font-->
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<!--Import FontAwesome Icons-->
