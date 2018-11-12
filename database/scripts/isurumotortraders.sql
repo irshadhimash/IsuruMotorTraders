@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 05, 2018 at 06:28 PM
+-- Generation Time: Nov 12, 2018 at 06:29 PM
 -- Server version: 5.7.19
 -- PHP Version: 5.6.31
 
@@ -43,7 +43,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GETUSERFORLOGIN` (IN `username` CHA
   	ON SU.UserId = UHR.UserId
   INNER JOIN systemrole SR
   	ON UHR.SystemRoleId = SR.SystemRoleId
-  WHERE username = username;
+  WHERE SU.username = username;
 END$$
 
 DELIMITER ;
@@ -193,30 +193,32 @@ CREATE TABLE IF NOT EXISTS `systemrole_has_systemmodule` (
 DROP TABLE IF EXISTS `systemuser`;
 CREATE TABLE IF NOT EXISTS `systemuser` (
   `UserId` int(11) NOT NULL AUTO_INCREMENT,
-  `UserLoginID` int(11) NOT NULL,
-  `IsTrader` varchar(3) DEFAULT 'No',
-  `IsCustomer` varchar(3) DEFAULT 'No',
-  `IsEmployee` varchar(3) DEFAULT 'No',
+  `UserLoginID` int(11) DEFAULT NULL,
+  `IsTrader` varchar(3) DEFAULT 'n',
+  `IsCustomer` varchar(3) DEFAULT 'n',
+  `IsEmployee` varchar(3) DEFAULT 'n',
   `Username` varchar(50) NOT NULL,
   `FirstName` varchar(50) NOT NULL,
   `LastName` varchar(50) NOT NULL,
   `PreferedName` varchar(50) NOT NULL,
   `Gender` varchar(6) NOT NULL,
   `DOB` date NOT NULL,
-  `IsActive` varchar(3) NOT NULL,
-  `IsActivated` varchar(3) NOT NULL,
-  `IsAdmin` varchar(3) DEFAULT NULL,
+  `IsActive` varchar(3) DEFAULT 'n',
+  `IsActivated` varchar(3) DEFAULT 'n',
+  `IsAdmin` varchar(3) DEFAULT 'n',
+  `Address` varchar(50) NOT NULL,
+  `Email` varchar(60) NOT NULL,
   PRIMARY KEY (`UserId`,`Username`),
   UNIQUE KEY `Username_UNIQUE` (`Username`),
   KEY `UserLoginID_idx` (`UserLoginID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `systemuser`
 --
 
-INSERT INTO `systemuser` (`UserId`, `UserLoginID`, `IsTrader`, `IsCustomer`, `IsEmployee`, `Username`, `FirstName`, `LastName`, `PreferedName`, `Gender`, `DOB`, `IsActive`, `IsActivated`, `IsAdmin`) VALUES
-(1, 1, 'n', 'n', 'n', 'irshadh', 'Mohomed', 'Irshadh', 'irshadh', 'Male', '1994-09-26', 'y', 'y', 'y');
+INSERT INTO `systemuser` (`UserId`, `UserLoginID`, `IsTrader`, `IsCustomer`, `IsEmployee`, `Username`, `FirstName`, `LastName`, `PreferedName`, `Gender`, `DOB`, `IsActive`, `IsActivated`, `IsAdmin`, `Address`, `Email`) VALUES
+(1, 1, 'n', 'n', 'n', 'irshadh', 'Mohomed', 'Irshadh', 'irshadh', 'Male', '1994-09-26', 'y', 'y', 'y', '', '');
 
 -- --------------------------------------------------------
 

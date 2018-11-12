@@ -2,16 +2,18 @@
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS `CREATEUSER` $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `CREATEUSER`(
-    IN `username` CHAR(50)
+CREATE PROCEDURE `CREATEUSER`(
+    IN istrader VARCHAR(3), IN iscustomer VARCHAR(3), IN isemployee VARCHAR(3), IN firstname VARCHAR(50), IN lastname VARCHAR(50), IN preferedname VARCHAR(50), IN address VARCHAR(50),
+    IN gender VARCHAR(6), IN DOB DATE, IN email VARCHAR(60), IN username VARCHAR(50), IN hashedpw VARCHAR(255), IN isadmin VARCHAR(3)
 )
 BEGIN
 
-DECLARE RecCount INT;
+	INSERT INTO systemuser ( istrader, iscustomer, isemployee, firstname, lastname, preferedname, address, gender, DOB, email, username, isadmin)
+    	VALUES (istrader, iscustomer, isemployee, firstname, lastname, preferedname, address, gender, DOB, email, username, isadmin)
+        
+	INSERT INTO userlogin ( username, hashedpassword)
+    	VALUES ( username, hashedpw )
 
-SET @RecCount = SELECT COUNT(*) FROM systemuser WHERE USERNAME = username;
-
-IF RecCount = 1 THEN
-	SELECT 'Success'
+END
 
 DELIMITER ;

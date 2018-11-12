@@ -11,3 +11,7 @@ SET @RecCount = SELECT COUNT(*) FROM systemuser su WHERE su.username = Username
 SELECT RecCount
 
 DELIMITER ;
+
+/*
+INSERT INTO systemuser ( firstname, lastname, preferedname, address, gender, DOB, email, username) VALUES ( 'Sahana', 'Fathima', 'sahana', 'Colombo', 'Female', '1995-10-16', 'abc@xyz.com', 'sahana')
+*/

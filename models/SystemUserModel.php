@@ -7,17 +7,23 @@ class SystemUserModel extends DBModel{
 	
 	private $user = array();
 
-    function create(){
+    function create( $istrader, $iscustomer, $isemployee, $firstname, $lastname, $preferedname, $address, $gender, $DOB, $email, $username, $hashedpw, $isadmin ){
 
         $connection = $this->initDBConnection();
 
-		/*if($connection->connect_error){
+		if($connection->connect_error){
 			echo "Cannot connect to the database:".$connection->connect_error;
 		}else{
-			$sqlQuery = "call GETUSERFORLOGIN('$username') ";
-			$resultSet = $connection->query($sqlQuery);
-			$this->user = $resultSet->fetch_assoc();
-        }*/
+			$sqlQuery = "call CREATEUSER( '$istrader', '$iscustomer', '$isemployee', '$firstname', '$lastname', '$preferedname',
+					 '$address', '$gender', '$DOB', '$email', '$username', '$hashedpw', '$isadmin' ) ";
+			
+			
+			if ( $connection->query($sqlQuery) == true ){
+				return 'success';
+			}else{
+				return $sqlQuery;
+			}
+        }
         
 	}
 

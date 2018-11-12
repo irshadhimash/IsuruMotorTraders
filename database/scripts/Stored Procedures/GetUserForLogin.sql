@@ -18,7 +18,7 @@ BEGIN
   	ON SU.UserId = UHR.UserId
   INNER JOIN systemrole SR
   	ON UHR.SystemRoleId = SR.SystemRoleId
-  WHERE username = username;
+  WHERE SU.username = username;
 END $$
 
 DELIMITER ;

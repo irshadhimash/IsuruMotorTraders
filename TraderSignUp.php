@@ -59,8 +59,8 @@
             <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">Gender</span>
             </div>
-            <input type="radio" value="Male" name="tGender" id="tGender"/> Male
-            <input type="radio" value="Female" name="tGender" id="tGender"/> Female
+            <input type="radio" value="Male" name="tGender"/> Male
+            <input type="radio" value="Female" name="tGender"/> Female
         </div>
 
         <div class="input-group mb-3">

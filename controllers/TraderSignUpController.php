@@ -1,8 +1,6 @@
 
 <?php
 
-//session_start();
-
 require($_SERVER['DOCUMENT_ROOT'].'/IsuruMotorTraders/models/SystemUserModel.php');
 
 class TraderSignUpController extends SystemUserModel{
@@ -18,17 +16,32 @@ class TraderSignUpController extends SystemUserModel{
 			$resultSet = $connection->query($sqlQuery);
             $user = $resultSet->fetch_assoc();
             
-            if ($user == null | $user == ''){
+            if ($user['Username'] == null | $user['Username'] == ''){
                 
-                $this->create();
-                //echo ("<script type='text/javascript'> alert('user added');</script>");
+                $this->createTrader();
+
             }else{
                 echo ("<script type='text/javascript'> alert('Already there is a user with that username. Please pick a different one!');</script>");
             }
 
         }
 
-	}
+    }
+    
+    function createTrader(){
+
+        $SALT = 'This is my password salt!';
+        $HashedPw = crypt($_POST['tPassword'], $SALT);
+        $msg = $this->create( 'y', 'n', 'n', $_POST['tFirstName'], $_POST['tLastName'], $_POST['tPreferedName'], $_POST['tAddress'],
+                                 $_POST['tGender'], $_POST['tDob'], $_POST['tEmail'], $_POST['tUsername'], $HashedPw , 'n' );
+
+        if(msg == 'success'){
+            echo ("<script type='text/javascript'> alert('success');</script>");
+        }else{
+            echo ("<script type='text/javascript'> alert('$msg');</script>");
+        }
+
+    }
 
 }
 
