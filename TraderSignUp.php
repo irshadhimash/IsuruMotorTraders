@@ -52,7 +52,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">Address</span>
             </div>
-            <input type="text" name="tAddress" id="tAddress" class="form-control" placeholder="Your full address" aria-label="Your full address" required  aria-describedby="basic-addon1">
+            <input type="text" name="tAddress" id="tAddress" class="form-control" placeholder="Your city" aria-label="Your full address" required  aria-describedby="basic-addon1">
         </div>
 
         <div class="input-group mb-3">
