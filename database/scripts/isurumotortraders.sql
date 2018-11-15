@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 4.6.4
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Nov 12, 2018 at 06:29 PM
--- Server version: 5.7.19
--- PHP Version: 5.6.31
+-- Host: 127.0.0.1
+-- Generation Time: Nov 15, 2018 at 06:04 PM
+-- Server version: 5.7.14
+-- PHP Version: 5.6.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -26,7 +24,40 @@ DELIMITER $$
 --
 -- Procedures
 --
-DROP PROCEDURE IF EXISTS `GETUSERFORLOGIN`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CREATEUSER` (IN `istrader` VARCHAR(3), IN `iscustomer` VARCHAR(3), IN `isemployee` VARCHAR(3), IN `firstname` VARCHAR(50), IN `lastname` VARCHAR(50), IN `preferedname` VARCHAR(50), IN `address` VARCHAR(50), IN `gender` VARCHAR(6), IN `DOB` DATE, IN `email` VARCHAR(60), IN `username` VARCHAR(50), IN `hashedpw` VARCHAR(255), IN `isadmin` VARCHAR(3))  BEGIN
+START TRANSACTION;
+
+	INSERT INTO userlogin ( username, hashedpassword)
+    	VALUES ( username, hashedpw );
+        
+	INSERT INTO systemuser ( UserLoginID, istrader, iscustomer, isemployee, firstname, lastname, preferedname, address, gender, DOB, email, username, isadmin)
+    	VALUES ( LAST_INSERT_ID(), istrader, iscustomer, isemployee, firstname, lastname, preferedname, address, gender, DOB, email, username, isadmin);
+
+COMMIT;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CREATEVEHICLE` (IN `RegistrationNo` VARCHAR(10), IN `EngineNo` VARCHAR(50), IN `VehicleClass` VARCHAR(20), IN `Status` VARCHAR(10), IN `FuelType` VARCHAR(10), IN `Country` VARCHAR(15), IN `Make` VARCHAR(15), IN `Model` VARCHAR(15), IN `Cost` INT, IN `SalePrice` INT)  NO SQL
+INSERT INTO vehicle (RegistrationNo, EngineNo, VehicleClass, Status, FuelType, Country, Make, Model, Cost, SalePrice ) VALUES ( RegistrationNo, EngineNo, VehicleClass, Status, FuelType, Country, Make, Model, Cost, SalePrice )$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GETALLVEHICLES` ()  NO SQL
+SELECT
+	V.*,
+    SU.PreferedName AS ListedBy
+FROM vehicle v
+LEFT OUTER JOIN systemuser SU
+	ON V.UserId = SU.UserId$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GETMODULELISTBYROLECODE` (IN `rolecode` VARCHAR(50))  NO SQL
+SELECT
+SR.RoleCode,
+SM.ModuleCode
+FROM roldemodulelink RL
+INNER JOIN systemrole SR
+ON RL.RoleId = SR.SystemRoleId
+INNER JOIN systemmodule SM
+ON RL.ModuleId = SM.SystemModuleID
+WHERE SR.RoleCode = rolecode$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GETUSERFORLOGIN` (IN `username` CHAR(50))  BEGIN
   SELECT
   	SU.UserId,
@@ -39,10 +70,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GETUSERFORLOGIN` (IN `username` CHA
   FROM systemuser SU
   INNER JOIN userlogin UL
   	ON SU.UserLoginID = UL.UserLoginID
-  INNER JOIN user_has_systemrole UHR
-  	ON SU.UserId = UHR.UserId
-  INNER JOIN systemrole SR
-  	ON UHR.SystemRoleId = SR.SystemRoleId
+  LEFT OUTER JOIN UserRoleLink URL
+  	ON SU.UserId = URL.UserId
+  LEFT OUTER JOIN systemrole SR
+  	ON URL.SystemRoleId = SR.SystemRoleId
   WHERE SU.username = username;
 END$$
 
@@ -54,10 +85,8 @@ DELIMITER ;
 -- Table structure for table `bill`
 --
 
-DROP TABLE IF EXISTS `bill`;
-CREATE TABLE IF NOT EXISTS `bill` (
-  `BillId` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`BillId`)
+CREATE TABLE `bill` (
+  `BillId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -66,12 +95,9 @@ CREATE TABLE IF NOT EXISTS `bill` (
 -- Table structure for table `customer`
 --
 
-DROP TABLE IF EXISTS `customer`;
-CREATE TABLE IF NOT EXISTS `customer` (
-  `CustomerID` int(11) NOT NULL AUTO_INCREMENT,
-  `UserID` int(11) NOT NULL,
-  PRIMARY KEY (`CustomerID`),
-  KEY `UserID_idx` (`UserID`)
+CREATE TABLE `customer` (
+  `CustomerID` int(11) NOT NULL,
+  `UserID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -80,12 +106,9 @@ CREATE TABLE IF NOT EXISTS `customer` (
 -- Table structure for table `employee`
 --
 
-DROP TABLE IF EXISTS `employee`;
-CREATE TABLE IF NOT EXISTS `employee` (
-  `EmployeeID` int(11) NOT NULL AUTO_INCREMENT,
-  `UserID` int(11) NOT NULL,
-  PRIMARY KEY (`EmployeeID`),
-  KEY `UserID_idx` (`UserID`)
+CREATE TABLE `employee` (
+  `EmployeeID` int(11) NOT NULL,
+  `UserID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -94,11 +117,35 @@ CREATE TABLE IF NOT EXISTS `employee` (
 -- Table structure for table `installmentpayment`
 --
 
-DROP TABLE IF EXISTS `installmentpayment`;
-CREATE TABLE IF NOT EXISTS `installmentpayment` (
-  `InstallmentPaymentId` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`InstallmentPaymentId`)
+CREATE TABLE `installmentpayment` (
+  `InstallmentPaymentId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `roldemodulelink`
+--
+
+CREATE TABLE `roldemodulelink` (
+  `RoleModuleId` int(10) UNSIGNED NOT NULL,
+  `RoleId` int(10) UNSIGNED NOT NULL,
+  `ModuleId` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `roldemodulelink`
+--
+
+INSERT INTO `roldemodulelink` (`RoleModuleId`, `RoleId`, `ModuleId`) VALUES
+(1, 1, 1),
+(2, 1, 2),
+(3, 1, 3),
+(4, 1, 4),
+(5, 1, 5),
+(6, 1, 6),
+(7, 1, 7),
+(8, 1, 8);
 
 -- --------------------------------------------------------
 
@@ -106,18 +153,13 @@ CREATE TABLE IF NOT EXISTS `installmentpayment` (
 -- Table structure for table `sale`
 --
 
-DROP TABLE IF EXISTS `sale`;
-CREATE TABLE IF NOT EXISTS `sale` (
-  `SaleID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `sale` (
+  `SaleID` int(11) NOT NULL,
   `SaleVehicleid` int(11) NOT NULL,
   `CustomerID` int(11) NOT NULL,
   `Bill_BillId` int(11) NOT NULL,
   `InstallmentPayment_InstallmentPaymentId` int(11) NOT NULL,
-  `Customer_CustomerID` int(11) NOT NULL,
-  PRIMARY KEY (`SaleID`),
-  KEY `fk_Sale_Bill1_idx` (`Bill_BillId`),
-  KEY `fk_Sale_InstallmentPayment1_idx` (`InstallmentPayment_InstallmentPaymentId`),
-  KEY `fk_Sale_Customer1_idx` (`Customer_CustomerID`)
+  `Customer_CustomerID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -126,13 +168,11 @@ CREATE TABLE IF NOT EXISTS `sale` (
 -- Table structure for table `systemmodule`
 --
 
-DROP TABLE IF EXISTS `systemmodule`;
-CREATE TABLE IF NOT EXISTS `systemmodule` (
-  `SystemModuleID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `systemmodule` (
+  `SystemModuleID` int(11) NOT NULL,
   `ModuleCode` varchar(50) NOT NULL,
-  `ModuleName` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`SystemModuleID`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+  `ModuleName` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `systemmodule`
@@ -154,13 +194,11 @@ INSERT INTO `systemmodule` (`SystemModuleID`, `ModuleCode`, `ModuleName`) VALUES
 -- Table structure for table `systemrole`
 --
 
-DROP TABLE IF EXISTS `systemrole`;
-CREATE TABLE IF NOT EXISTS `systemrole` (
-  `SystemRoleId` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `systemrole` (
+  `SystemRoleId` int(11) NOT NULL,
   `RoleCode` varchar(50) NOT NULL,
-  `RoleName` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`SystemRoleId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  `RoleName` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `systemrole`
@@ -172,27 +210,11 @@ INSERT INTO `systemrole` (`SystemRoleId`, `RoleCode`, `RoleName`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `systemrole_has_systemmodule`
---
-
-DROP TABLE IF EXISTS `systemrole_has_systemmodule`;
-CREATE TABLE IF NOT EXISTS `systemrole_has_systemmodule` (
-  `SystemRole_SystemRoleId` int(11) NOT NULL,
-  `SystemModule_SystemModuleID` int(11) NOT NULL,
-  PRIMARY KEY (`SystemRole_SystemRoleId`,`SystemModule_SystemModuleID`),
-  KEY `fk_SystemRole_has_SystemModule_SystemModule1_idx` (`SystemModule_SystemModuleID`),
-  KEY `fk_SystemRole_has_SystemModule_SystemRole1_idx` (`SystemRole_SystemRoleId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `systemuser`
 --
 
-DROP TABLE IF EXISTS `systemuser`;
-CREATE TABLE IF NOT EXISTS `systemuser` (
-  `UserId` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `systemuser` (
+  `UserId` int(11) NOT NULL,
   `UserLoginID` int(11) DEFAULT NULL,
   `IsTrader` varchar(3) DEFAULT 'n',
   `IsCustomer` varchar(3) DEFAULT 'n',
@@ -207,18 +229,17 @@ CREATE TABLE IF NOT EXISTS `systemuser` (
   `IsActivated` varchar(3) DEFAULT 'n',
   `IsAdmin` varchar(3) DEFAULT 'n',
   `Address` varchar(50) NOT NULL,
-  `Email` varchar(60) NOT NULL,
-  PRIMARY KEY (`UserId`,`Username`),
-  UNIQUE KEY `Username_UNIQUE` (`Username`),
-  KEY `UserLoginID_idx` (`UserLoginID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+  `Email` varchar(60) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `systemuser`
 --
 
 INSERT INTO `systemuser` (`UserId`, `UserLoginID`, `IsTrader`, `IsCustomer`, `IsEmployee`, `Username`, `FirstName`, `LastName`, `PreferedName`, `Gender`, `DOB`, `IsActive`, `IsActivated`, `IsAdmin`, `Address`, `Email`) VALUES
-(1, 1, 'n', 'n', 'n', 'irshadh', 'Mohomed', 'Irshadh', 'irshadh', 'Male', '1994-09-26', 'y', 'y', 'y', '', '');
+(1, 1, 'n', 'n', 'n', 'irshadh', 'Mohomed', 'Irshadh', 'irshadh', 'Male', '1994-09-26', 'y', 'y', 'y', '', ''),
+(9, 8, 'y', 'n', 'n', 'abc', 'abc', 'abc', 'abc', 'Male', '2018-11-14', 'n', 'n', 'n', 'abc', 'abc2@xyz.com'),
+(10, 9, 'y', 'n', 'n', 'sahanaf', 'Fathima', 'Sahana', 'Sahana', 'Female', '1995-10-16', 'n', 'n', 'n', 'Minuwangoda', 'abc@xyz.com');
 
 -- --------------------------------------------------------
 
@@ -226,14 +247,10 @@ INSERT INTO `systemuser` (`UserId`, `UserLoginID`, `IsTrader`, `IsCustomer`, `Is
 -- Table structure for table `userlogin`
 --
 
-DROP TABLE IF EXISTS `userlogin`;
-CREATE TABLE IF NOT EXISTS `userlogin` (
+CREATE TABLE `userlogin` (
   `UserLoginID` int(11) NOT NULL,
   `Username` varchar(50) NOT NULL,
-  `HashedPassword` varchar(16) NOT NULL,
-  PRIMARY KEY (`UserLoginID`),
-  UNIQUE KEY `Username_UNIQUE` (`Username`),
-  KEY `Username_idx` (`Username`)
+  `HashedPassword` varchar(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -241,30 +258,202 @@ CREATE TABLE IF NOT EXISTS `userlogin` (
 --
 
 INSERT INTO `userlogin` (`UserLoginID`, `Username`, `HashedPassword`) VALUES
-(1, 'irshadh', 'ThEemm5.5pci6');
+(1, 'irshadh', 'ThEemm5.5pci6'),
+(8, 'abc', 'ThG2XHmq.t7EU'),
+(9, 'sahanaf', 'ThrxmgTdEzwI.');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_has_systemrole`
+-- Table structure for table `userrolelink`
 --
 
-DROP TABLE IF EXISTS `user_has_systemrole`;
-CREATE TABLE IF NOT EXISTS `user_has_systemrole` (
+CREATE TABLE `userrolelink` (
   `UserId` int(11) NOT NULL,
-  `SystemRoleId` int(11) NOT NULL,
-  PRIMARY KEY (`UserId`,`SystemRoleId`),
-  KEY `fk_User_has_SystemRole_SystemRole1_idx` (`SystemRoleId`),
-  KEY `fk_User_has_SystemRole_User1_idx` (`UserId`)
+  `SystemRoleId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `user_has_systemrole`
+-- Dumping data for table `userrolelink`
 --
 
-INSERT INTO `user_has_systemrole` (`UserId`, `SystemRoleId`) VALUES
+INSERT INTO `userrolelink` (`UserId`, `SystemRoleId`) VALUES
 (1, 1);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vehicle`
+--
+
+CREATE TABLE `vehicle` (
+  `VehicleId` int(10) UNSIGNED NOT NULL,
+  `RegistrationNo` varchar(10) NOT NULL,
+  `EngineNo` varchar(50) NOT NULL,
+  `VehicleClass` varchar(20) NOT NULL,
+  `Status` varchar(10) NOT NULL,
+  `FuelType` varchar(10) NOT NULL,
+  `Country` varchar(15) NOT NULL,
+  `Make` varchar(15) NOT NULL,
+  `Model` varchar(15) NOT NULL,
+  `Cost` int(10) UNSIGNED NOT NULL,
+  `SalePrice` int(10) UNSIGNED NOT NULL,
+  `UserId` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `vehicle`
+--
+
+INSERT INTO `vehicle` (`VehicleId`, `RegistrationNo`, `EngineNo`, `VehicleClass`, `Status`, `FuelType`, `Country`, `Make`, `Model`, `Cost`, `SalePrice`, `UserId`) VALUES
+(1, 'HD-2433', 'XYASFDE', 'Motor Cycle', 'Used', 'Petrol', 'India', 'Bajaj', 'Pulsar', 87000, 120000, 9);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `bill`
+--
+ALTER TABLE `bill`
+  ADD PRIMARY KEY (`BillId`);
+
+--
+-- Indexes for table `customer`
+--
+ALTER TABLE `customer`
+  ADD PRIMARY KEY (`CustomerID`),
+  ADD KEY `UserID_idx` (`UserID`);
+
+--
+-- Indexes for table `employee`
+--
+ALTER TABLE `employee`
+  ADD PRIMARY KEY (`EmployeeID`),
+  ADD KEY `UserID_idx` (`UserID`);
+
+--
+-- Indexes for table `installmentpayment`
+--
+ALTER TABLE `installmentpayment`
+  ADD PRIMARY KEY (`InstallmentPaymentId`);
+
+--
+-- Indexes for table `roldemodulelink`
+--
+ALTER TABLE `roldemodulelink`
+  ADD PRIMARY KEY (`RoleModuleId`);
+
+--
+-- Indexes for table `sale`
+--
+ALTER TABLE `sale`
+  ADD PRIMARY KEY (`SaleID`),
+  ADD KEY `fk_Sale_Bill1_idx` (`Bill_BillId`),
+  ADD KEY `fk_Sale_InstallmentPayment1_idx` (`InstallmentPayment_InstallmentPaymentId`),
+  ADD KEY `fk_Sale_Customer1_idx` (`Customer_CustomerID`);
+
+--
+-- Indexes for table `systemmodule`
+--
+ALTER TABLE `systemmodule`
+  ADD PRIMARY KEY (`SystemModuleID`);
+
+--
+-- Indexes for table `systemrole`
+--
+ALTER TABLE `systemrole`
+  ADD PRIMARY KEY (`SystemRoleId`);
+
+--
+-- Indexes for table `systemuser`
+--
+ALTER TABLE `systemuser`
+  ADD PRIMARY KEY (`UserId`,`Username`),
+  ADD UNIQUE KEY `Username_UNIQUE` (`Username`),
+  ADD KEY `UserLoginID_idx` (`UserLoginID`);
+
+--
+-- Indexes for table `userlogin`
+--
+ALTER TABLE `userlogin`
+  ADD PRIMARY KEY (`UserLoginID`),
+  ADD UNIQUE KEY `Username_UNIQUE` (`Username`),
+  ADD KEY `Username_idx` (`Username`);
+
+--
+-- Indexes for table `userrolelink`
+--
+ALTER TABLE `userrolelink`
+  ADD PRIMARY KEY (`UserId`,`SystemRoleId`),
+  ADD KEY `fk_User_has_SystemRole_SystemRole1_idx` (`SystemRoleId`),
+  ADD KEY `fk_User_has_SystemRole_User1_idx` (`UserId`);
+
+--
+-- Indexes for table `vehicle`
+--
+ALTER TABLE `vehicle`
+  ADD PRIMARY KEY (`VehicleId`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `bill`
+--
+ALTER TABLE `bill`
+  MODIFY `BillId` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `customer`
+--
+ALTER TABLE `customer`
+  MODIFY `CustomerID` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `employee`
+--
+ALTER TABLE `employee`
+  MODIFY `EmployeeID` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `installmentpayment`
+--
+ALTER TABLE `installmentpayment`
+  MODIFY `InstallmentPaymentId` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `roldemodulelink`
+--
+ALTER TABLE `roldemodulelink`
+  MODIFY `RoleModuleId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT for table `sale`
+--
+ALTER TABLE `sale`
+  MODIFY `SaleID` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `systemmodule`
+--
+ALTER TABLE `systemmodule`
+  MODIFY `SystemModuleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT for table `systemrole`
+--
+ALTER TABLE `systemrole`
+  MODIFY `SystemRoleId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `systemuser`
+--
+ALTER TABLE `systemuser`
+  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+--
+-- AUTO_INCREMENT for table `userlogin`
+--
+ALTER TABLE `userlogin`
+  MODIFY `UserLoginID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+--
+-- AUTO_INCREMENT for table `vehicle`
+--
+ALTER TABLE `vehicle`
+  MODIFY `VehicleId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- Constraints for dumped tables
 --
@@ -278,19 +467,11 @@ ALTER TABLE `sale`
   ADD CONSTRAINT `fk_Sale_InstallmentPayment1` FOREIGN KEY (`InstallmentPayment_InstallmentPaymentId`) REFERENCES `installmentpayment` (`InstallmentPaymentId`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Constraints for table `systemrole_has_systemmodule`
+-- Constraints for table `userrolelink`
 --
-ALTER TABLE `systemrole_has_systemmodule`
-  ADD CONSTRAINT `fk_SystemRole_has_SystemModule_SystemModule1` FOREIGN KEY (`SystemModule_SystemModuleID`) REFERENCES `systemmodule` (`SystemModuleID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_SystemRole_has_SystemModule_SystemRole1` FOREIGN KEY (`SystemRole_SystemRoleId`) REFERENCES `systemrole` (`SystemRoleId`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Constraints for table `user_has_systemrole`
---
-ALTER TABLE `user_has_systemrole`
+ALTER TABLE `userrolelink`
   ADD CONSTRAINT `fk_User_has_SystemRole_SystemRole1` FOREIGN KEY (`SystemRoleId`) REFERENCES `systemrole` (`SystemRoleId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_User_has_SystemRole_User1` FOREIGN KEY (`UserId`) REFERENCES `systemuser` (`UserId`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

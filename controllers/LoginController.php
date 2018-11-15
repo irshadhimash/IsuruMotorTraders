@@ -4,7 +4,7 @@
 session_start();
 
 require($_SERVER['DOCUMENT_ROOT'].'/IsuruMotorTraders/models/LoginModel.php');
-require('SessionValidatorController.php');
+//require('SessionValidatorController.php');
 
 class LoginController extends LoginModel{
 

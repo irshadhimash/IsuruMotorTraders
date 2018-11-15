@@ -1,6 +1,6 @@
 
-<?php 
-    session_start();
+<?php
+    require("controllers/HomeController.php");
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +38,13 @@
     <div class="container">
         <div class="row row flex-xl-nowrap">
             <div class="col-lg-4">
+                <a href="inventory.php">
+                    <img class="square" src="images/appicons/Inventory.png" alt="Generic placeholder image" width="180" height="180">
+                </a>
+                <h2>Inventory</h2>
+                <p>View and manage your inventory.</p>
+            </div>
+            <div class="col-lg-4">
                 <a href="#">
                     <img class="square" src="images/appicons/customer.png" alt="Generic placeholder image" width="180" height="180">
                 </a>
@@ -46,28 +53,21 @@
             </div>
             <div class="col-lg-4">
                 <a href="#">
-                    <img class="square" src="images/appicons/trader.png" alt="Generic placeholder image" width="180" height="180">
+                    <img class="square" src="images/appicons/meeting.png" alt="Generic placeholder image" width="180" height="180">
                 </a>
                 <h2>Traders</h2>
                 <p>View and manage your list of traders.</p>
-            </div>
-            <div class="col-lg-4">
-                <a href="#">
-                    <img class="square" src="images/appicons/inventory.png" alt="Generic placeholder image" width="180" height="180">
-                </a>
-                <h2>Inventory</h2>
-                <p>View and manage your inventory.</p>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-4">
                 <a href="#">
-                    <img class="square" src="images/appicons/sale.png" alt="Generic placeholder image" width="180" height="180">
+                    <img class="square" src="images/appicons/Sales.png" alt="Generic placeholder image" width="180" height="180">
                 </a>
                 <h2>Sales Portal</h2>
                 <p>View and manage your sales.</p>
             </div>
-            <div class="col-lg-4">
+            <!--<div class="col-lg-4">
                 <a href="#">
                     <img class="square" src="images/appicons/money.png" alt="Generic placeholder image" width="180" height="180">
                 </a>
@@ -80,7 +80,8 @@
                 </a>
                 <h2>Installment Payments</h2>
                 <p>View and manage your installment based payments.</p>
-            </div>
+            </div>-->
+
         </div>
     </div>
     <footer class="container">

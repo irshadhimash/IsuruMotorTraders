@@ -12,17 +12,21 @@ class SystemUserModel extends DBModel{
         $connection = $this->initDBConnection();
 
 		if($connection->connect_error){
+
 			echo "Cannot connect to the database:".$connection->connect_error;
+
 		}else{
-			$sqlQuery = "call CREATEUSER( '$istrader', '$iscustomer', '$isemployee', '$firstname', '$lastname', '$preferedname',
-					 '$address', '$gender', '$DOB', '$email', '$username', '$hashedpw', '$isadmin' ) ";
-			
-			
+
+			$sqlQuery = "call CREATEUSER( '$istrader', '$iscustomer', '$isemployee', '$firstname', '$lastname', '$preferedname', '$address', '$gender', '$DOB', '$email', '$username', '$hashedpw', '$isadmin')";
 			if ( $connection->query($sqlQuery) == true ){
+				$connection->close();
 				return 'success';
 			}else{
-				return $sqlQuery;
+				echo "Error in: " . $sqlQuery . "<br>" . $connection->error;
+				$connection->close();
+				return 'failed';
 			}
+
         }
         
 	}

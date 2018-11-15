@@ -35,8 +35,8 @@ class TraderSignUpController extends SystemUserModel{
         $msg = $this->create( 'y', 'n', 'n', $_POST['tFirstName'], $_POST['tLastName'], $_POST['tPreferedName'], $_POST['tAddress'],
                                  $_POST['tGender'], $_POST['tDob'], $_POST['tEmail'], $_POST['tUsername'], $HashedPw , 'n' );
 
-        if(msg == 'success'){
-            echo ("<script type='text/javascript'> alert('success');</script>");
+        if($msg == 'success'){
+            header('location:home.php');
         }else{
             echo ("<script type='text/javascript'> alert('$msg');</script>");
         }

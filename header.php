@@ -7,6 +7,7 @@
     <ul class="nav navbar-nav navbar-right">
         <li class="navbar-brand">Hello <?php echo $_SESSION['PreferedName']; ?></li>
         <li class="navbar-brand"> <a href="SystemConfiguration.php">System Configuration</a> </li>
+        <li class="navbar-brand"> <a href="index.php">Logout</a></li>
     </ul>
   </div>
 </nav>

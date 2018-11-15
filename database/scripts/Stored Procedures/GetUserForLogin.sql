@@ -2,6 +2,7 @@ DELIMITER $$
 
 DROP PROCEDURE IF EXISTS `GETUSERFORLOGIN` $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GETUSERFORLOGIN`(IN `username` CHAR(50))
+
 BEGIN
   SELECT
   	SU.UserId,
@@ -14,11 +15,11 @@ BEGIN
   FROM systemuser SU
   INNER JOIN userlogin UL
   	ON SU.UserLoginID = UL.UserLoginID
-  INNER JOIN user_has_systemrole UHR
+  LEFT OUTER JOIN user_has_systemrole UHR
   	ON SU.UserId = UHR.UserId
-  INNER JOIN systemrole SR
+  LEFT OUTER JOIN systemrole SR
   	ON UHR.SystemRoleId = SR.SystemRoleId
   WHERE SU.username = username;
-END $$
+END
 
 DELIMITER ;
