@@ -1,15 +1,19 @@
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+<nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-        <a class="navbar-brand" href="home.php">Isuru Motor Traders</a>
+        <a class="navbar-brand" href="#">Isuru Motor Traders</a>
     </div>
     <ul class="nav navbar-nav navbar-right">
-        <li class="navbar-brand">Hello <?php echo $_SESSION['PreferedName']; ?></li>
-        <li class="navbar-brand"> <a href="SystemConfiguration.php">System Configuration</a> </li>
-        <li class="navbar-brand"> <a href="index.php">Logout</a></li>
+        <li> <a href="home.php"> <span class="glyphicon glyphicon-home"></span> </a> </li>
+        <?php
+          if( $_SESSION['UserRole'] == 'Admin' ){
+            echo "<li> <a href='SystemConfiguration.php'> <span class='glyphicon glyphicon-wrench'></span> Configure </a> </li> ";
+          }
+        ?>
+        <li> <a class="link" href="#"> <span class="glyphicon glyphicon-cog"></span> My Settings </a> </li>
+        <li class="navbar-brand">Signed in as <?php echo $_SESSION['PreferedName']; ?></li>
+        <li> <a class="link" href="index.php"> <span class="glyphicon glyphicon-log-out"></span> </a></li>
     </ul>
   </div>
 </nav>
-
-<br/>

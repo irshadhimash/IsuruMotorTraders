@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 15, 2018 at 06:04 PM
+-- Generation Time: Nov 17, 2018 at 05:51 PM
 -- Server version: 5.7.14
 -- PHP Version: 5.6.25
 
@@ -36,8 +36,8 @@ START TRANSACTION;
 COMMIT;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `CREATEVEHICLE` (IN `RegistrationNo` VARCHAR(10), IN `EngineNo` VARCHAR(50), IN `VehicleClass` VARCHAR(20), IN `Status` VARCHAR(10), IN `FuelType` VARCHAR(10), IN `Country` VARCHAR(15), IN `Make` VARCHAR(15), IN `Model` VARCHAR(15), IN `Cost` INT, IN `SalePrice` INT)  NO SQL
-INSERT INTO vehicle (RegistrationNo, EngineNo, VehicleClass, Status, FuelType, Country, Make, Model, Cost, SalePrice ) VALUES ( RegistrationNo, EngineNo, VehicleClass, Status, FuelType, Country, Make, Model, Cost, SalePrice )$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CREATEVEHICLE` (IN `RegistrationNo` VARCHAR(10), IN `EngineNo` VARCHAR(50), IN `VehicleClass` VARCHAR(20), IN `Status` VARCHAR(10), IN `FuelType` VARCHAR(10), IN `Country` VARCHAR(15), IN `Make` VARCHAR(15), IN `Model` VARCHAR(15), IN `Cost` INT, IN `SalePrice` INT, IN `UserId` INT, IN `Availability` VARCHAR(10))  NO SQL
+INSERT INTO vehicle (RegistrationNo, EngineNo, VehicleClass, Status, FuelType, Country, Make, Model, Cost, SalePrice, UserId, Availability ) VALUES ( RegistrationNo, EngineNo, VehicleClass, Status, FuelType, Country, Make, Model, Cost, SalePrice, UserId, Availability )$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GETALLVEHICLES` ()  NO SQL
 SELECT
@@ -50,7 +50,7 @@ LEFT OUTER JOIN systemuser SU
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GETMODULELISTBYROLECODE` (IN `rolecode` VARCHAR(50))  NO SQL
 SELECT
 SR.RoleCode,
-SM.ModuleCode
+SM.*
 FROM roldemodulelink RL
 INNER JOIN systemrole SR
 ON RL.RoleId = SR.SystemRoleId
@@ -76,6 +76,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GETUSERFORLOGIN` (IN `username` CHA
   	ON URL.SystemRoleId = SR.SystemRoleId
   WHERE SU.username = username;
 END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GETVEHICLEBYID` (IN `ID` INT(10))  NO SQL
+SELECT
+	V.*,
+    SU.PreferedName AS ListedBy
+FROM vehicle v
+LEFT OUTER JOIN systemuser SU
+	ON V.UserId = SU.UserId
+WHERE V.VehicleId = ID$$
 
 DELIMITER ;
 
@@ -138,14 +147,10 @@ CREATE TABLE `roldemodulelink` (
 --
 
 INSERT INTO `roldemodulelink` (`RoleModuleId`, `RoleId`, `ModuleId`) VALUES
-(1, 1, 1),
 (2, 1, 2),
 (3, 1, 3),
-(4, 1, 4),
-(5, 1, 5),
-(6, 1, 6),
-(7, 1, 7),
-(8, 1, 8);
+(9, 1, 9),
+(10, 1, 10);
 
 -- --------------------------------------------------------
 
@@ -171,22 +176,23 @@ CREATE TABLE `sale` (
 CREATE TABLE `systemmodule` (
   `SystemModuleID` int(11) NOT NULL,
   `ModuleCode` varchar(50) NOT NULL,
-  `ModuleName` varchar(50) DEFAULT NULL
+  `ModuleName` varchar(50) DEFAULT NULL,
+  `ModuleDescription` varchar(150) NOT NULL,
+  `ModuleLink` varchar(20) NOT NULL,
+  `ModuleImage` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `systemmodule`
 --
 
-INSERT INTO `systemmodule` (`SystemModuleID`, `ModuleCode`, `ModuleName`) VALUES
-(1, 'Purchasing', 'Purchase'),
-(2, 'Inventory', 'Inventory'),
-(3, 'Sales', 'Sales Portal'),
-(4, 'InstallmentPayment', 'Installment Payments'),
-(5, 'ServiceAggreements', 'Service Aggreements'),
-(6, 'CustomerPortal', 'Customers'),
-(7, 'TraderPortal', 'Traders'),
-(8, 'CostAndProfit', 'Cost And Profit');
+INSERT INTO `systemmodule` (`SystemModuleID`, `ModuleCode`, `ModuleName`, `ModuleDescription`, `ModuleLink`, `ModuleImage`) VALUES
+(2, 'Inventory', 'Inventory', 'View and manage your vehicle inventory.', 'inventory.php', 'Inventory.png'),
+(3, 'Sales', 'Sales', 'View and manage your sales.', 'sale.php', 'Sales.png'),
+(6, 'CustomerPortal', 'Customers', '', '', ''),
+(7, 'TraderPortal', 'Traders', '', '', ''),
+(9, 'Customers', 'Customers', 'View and manage your customers', 'Customers.php', 'customer.png'),
+(10, 'Traders', 'Traders', 'View and manage your traders', 'Traders.php', 'traders.png');
 
 -- --------------------------------------------------------
 
@@ -298,15 +304,19 @@ CREATE TABLE `vehicle` (
   `Model` varchar(15) NOT NULL,
   `Cost` int(10) UNSIGNED NOT NULL,
   `SalePrice` int(10) UNSIGNED NOT NULL,
-  `UserId` int(10) UNSIGNED DEFAULT NULL
+  `UserId` int(10) UNSIGNED DEFAULT NULL,
+  `Availability` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `vehicle`
 --
 
-INSERT INTO `vehicle` (`VehicleId`, `RegistrationNo`, `EngineNo`, `VehicleClass`, `Status`, `FuelType`, `Country`, `Make`, `Model`, `Cost`, `SalePrice`, `UserId`) VALUES
-(1, 'HD-2433', 'XYASFDE', 'Motor Cycle', 'Used', 'Petrol', 'India', 'Bajaj', 'Pulsar', 87000, 120000, 9);
+INSERT INTO `vehicle` (`VehicleId`, `RegistrationNo`, `EngineNo`, `VehicleClass`, `Status`, `FuelType`, `Country`, `Make`, `Model`, `Cost`, `SalePrice`, `UserId`, `Availability`) VALUES
+(1, 'HD-2433', 'XYASFDE', 'Motor Cycle', 'Used', 'Petrol', 'India', 'Bajaj', 'Pulsar', 87000, 120000, 9, ''),
+(2, 'CAX-0001', 'C2-XDASWR', 'Motor Cycle', 'Used', 'Petrol', 'Japan', 'Yamaha', 'FZ', 234000, 255000, 1, 'Available'),
+(3, 'asdas', 'asdas', 'Car', 'New', 'Diesel', 'asdasd', 'asdadwq', 'wqeqwe', 4452411, 4752411, 1, 'Available'),
+(4, 'adawew', 'qwewqe', 'Van', 'New', 'Diesel', 'adad', 'adad', 'adswqeqw', 4452411, 4752411, 1, 'Available');
 
 --
 -- Indexes for dumped tables
@@ -393,7 +403,7 @@ ALTER TABLE `userrolelink`
 -- Indexes for table `vehicle`
 --
 ALTER TABLE `vehicle`
-  ADD PRIMARY KEY (`VehicleId`);
+  ADD PRIMARY KEY (`VehicleId`,`RegistrationNo`) USING BTREE;
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -423,7 +433,7 @@ ALTER TABLE `installmentpayment`
 -- AUTO_INCREMENT for table `roldemodulelink`
 --
 ALTER TABLE `roldemodulelink`
-  MODIFY `RoleModuleId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `RoleModuleId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `sale`
 --
@@ -433,7 +443,7 @@ ALTER TABLE `sale`
 -- AUTO_INCREMENT for table `systemmodule`
 --
 ALTER TABLE `systemmodule`
-  MODIFY `SystemModuleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `SystemModuleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `systemrole`
 --
@@ -453,7 +463,7 @@ ALTER TABLE `userlogin`
 -- AUTO_INCREMENT for table `vehicle`
 --
 ALTER TABLE `vehicle`
-  MODIFY `VehicleId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `VehicleId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- Constraints for dumped tables
 --

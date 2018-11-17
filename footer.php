@@ -3,5 +3,5 @@
     <a href="#">Back to top</a>
 </p>
 <p>
-    © 2017-2018 Irsadh.
+    Developed by S. L. Irsadh | University of Colombo, Sri Lanka
 </p>

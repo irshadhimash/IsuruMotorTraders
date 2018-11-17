@@ -8,8 +8,8 @@ class HomeController extends SystemModuleModel{
 
     function getModulesByRoleCode($roleCode){
 
-        $moduleList = $this->getModuleListByRoleCode($roleCode);
-        $_SESSION['ModuleList'] = $moduleList;
+        return $this->getModuleListByRoleCode($roleCode);
+        
     }
 
     /*foreach($_SESSION['ModuleList'] as $module){
@@ -23,8 +23,5 @@ class HomeController extends SystemModuleModel{
     }*/
 
 }
-
-$homeObj = new HomeController;
-$homeObj->getModulesByRoleCode($_SESSION['UserRole']);
 
 ?>

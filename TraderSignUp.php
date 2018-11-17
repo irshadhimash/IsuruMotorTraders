@@ -103,7 +103,14 @@
 </body>
 
 <?php 
-	require("controllers/TraderSignUpController.php");
+    require("controllers/TraderSignUpController.php");
+    
+    if( isset($_POST['tSaveBtn']) ){
+
+        $TraderSignUp = new TraderSignUpController;
+        $TraderSignUp->checkUsernameAvailability($_POST['tUsername']);
+
+    }
 ?>
 
 </html>

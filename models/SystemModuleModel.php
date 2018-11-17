@@ -8,17 +8,16 @@ class SystemModuleModel extends DBModel{
     function getModuleListByRoleCode($roleCode){
 
         $connection = $this->initDBConnection();
-        $moduleList = null;
+        $result = null;
 
 		if($connection->connect_error){
 			echo "Cannot connect to the database:".$connection->connect_error;
 		}else{
             $query = "call GETMODULELISTBYROLECODE('$roleCode')";
-            $resultSet = $connection->query($query);
-            $moduleList = $resultSet->fetch_assoc();
+            $result = $connection->query($query);
         }
         $connection->close();
-        return $moduleList;
+        return $result;
     }
 
 }

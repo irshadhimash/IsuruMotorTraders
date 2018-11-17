@@ -45,11 +45,4 @@ class TraderSignUpController extends SystemUserModel{
 
 }
 
-if( isset($_POST['tSaveBtn']) ){
-
-    $TraderSignUp = new TraderSignUpController;
-    $TraderSignUp->checkUsernameAvailability($_POST['tUsername']);
-
-}
-
 ?>

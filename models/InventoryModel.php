@@ -5,9 +5,9 @@ require('DBModel.php');
 
 class InventoryModel extends DBModel{
 
-    private $vehicles = null;
+    private $result = null;
 
-    function create($RegistrationNo, $EngineNo, $VehicleClass, $Status, $FuelType, $Country, $Make, $Model, $Cost, $SalePrice){
+    function create($RegistrationNo, $EngineNo, $VehicleClass, $Status, $FuelType, $Country, $Make, $Model, $Cost, $SalePrice, $UserId, $Availability){
 
         $connection = $this->initDBConnection();
 
@@ -15,11 +15,11 @@ class InventoryModel extends DBModel{
 			echo "Cannot connect to the database:".$connection->connect_error;
 		}else{
             $sqlQuery = "call CREATEVEHICLE('$RegistrationNo', '$EngineNo', '$VehicleClass', '$Status',
-                         '$FuelType', '$Country', '$Make', '$Model', '$Cost', '$SalePrice')";
-            if ( $connection->query($query) == true ){
+                         '$FuelType', '$Country', '$Make', '$Model', '$Cost', '$SalePrice', $UserId, '$Availability')";
+            if ( $connection->query($sqlQuery) == true ){
                 header('location:inventory.php');
             }else{
-                echo ("<script type='text/javascript'> alert('Failed');</script>");
+                echo "Error in: " . $sqlQuery . "<br>" . $connection->error;
             }
         }
         $connection->close();
@@ -33,17 +33,48 @@ class InventoryModel extends DBModel{
 		if($connection->connect_error){
 			echo "Cannot connect to the database:".$connection->connect_error;
         }else{
-            $sqlQuery = "SELECT
-                            V.*,
-                            SU.PreferedName AS ListedBy
-                        FROM vehicle v
-                        LEFT OUTER JOIN systemuser SU
-                            ON V.UserId = SU.UserId";
+            $sqlQuery = "call GETALLVEHICLES";
             $result = $connection->query($sqlQuery);
-            $this->vehicles = $result->fetch_assoc();
         }
 
-        return $this->vehicles;
+        $connection->close();
+        return $result;
+
+    }
+
+    function getVehicleById($id){
+
+        $connection = $this->initDBConnection();
+
+		if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call GETVEHICLEBYID('$id')";
+            $result = $connection->query($sqlQuery);
+        }
+
+        $connection->close();
+        return $result;
+
+    }
+
+    function update($RegistrationNo, $EngineNo, $VehicleClass, $Status, $FuelType, $Country, $Make, $Model, $Cost, $SalePrice, $UserId, $Availability){
+
+        $connection = $this->initDBConnection();
+
+		if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call UPDATEVEHICLE('$RegistrationNo', '$EngineNo', '$VehicleClass', '$Status',
+                            '$FuelType', '$Country', '$Make', '$Model', '$Cost', '$SalePrice', $UserId, '$Availability')";
+            if ( $connection->query($sqlQuery) == true ){
+                header('location:inventory.php');
+            }else{
+                echo "Error in: " . $sqlQuery . "<br>" . $connection->error;
+            }
+        }
+
+        $connection->close();
 
     }
 
