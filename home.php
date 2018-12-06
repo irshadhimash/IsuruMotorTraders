@@ -8,6 +8,7 @@
 <html>
 
 <head>
+
     <meta charset="UTF-8">
 
     <!-- BootStrap -->
@@ -17,6 +18,7 @@
     <script src="js/bootstrap.js"></script>
 
     <title>Home</title>
+    
 </head>
 
 <body>
@@ -55,7 +57,13 @@
                 }
 
             ?>
-
+            <div class='col-lg-4'>
+                <a href='Reports.php'>
+                    <img class='square' src='images/appicons/reports.php' alt='Generic placeholder image' width='150' height='150'>
+                </a>
+                <h2>Reports</h2>
+                <p>View and manage your reports</p>
+            </div>
         </div>
 
     </div>

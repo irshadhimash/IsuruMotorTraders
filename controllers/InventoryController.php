@@ -15,7 +15,13 @@ class InventoryController extends InventoryModel{
 
     function addVehicle($registrationNo, $engineNo, $vehicleClass, $condition, $fuelType, $country, $make, $model, $cost, $salePrice, $UserId, $availability){
         
-        $this->create($registrationNo, $engineNo, $vehicleClass, $condition, $fuelType, $country, $make, $model, $cost, $salePrice, $UserId, $availability);
+        $msg = $this->create($registrationNo, $engineNo, $vehicleClass, $condition, $fuelType, $country, $make, $model, $cost, $salePrice, $UserId, $availability);
+
+        if( $msg == 'success'){
+            echo ("<script type='text/javascript'> alert('Vehicle Added');</script>");
+        }else{
+            echo ("<script type='text/javascript'> alert('Failed".$msg."');</script>");
+        }
 
     }
 
@@ -29,6 +35,16 @@ class InventoryController extends InventoryModel{
 
         $this->update($registrationNo, $engineNo, $vehicleClass, $condition, $fuelType, $country, $make, $model, $cost, $salePrice, $UserId, $availability);
         
+    }
+
+    function deleteVehicle($id){
+        
+        $this->delete($id);
+
+    }
+
+    function getReport(){
+        return $this->getReportByCountry();
     }
 
 }

@@ -42,12 +42,12 @@
 
         <div class="input-group mb-3">
             <span class="input-group-addon" id="basic-addon1">Registration No</span>
-            <input type="text" name="registrationNo" class="form-control" placeholder="Registration No" aria-describedby="basic-addon1">
+            <input type="text" name="registrationNo" required class="form-control" placeholder="Format xx-xxxx" aria-describedby="basic-addon1">
         </div> </br>
 
         <div class="input-group mb-3">
             <span class="input-group-addon" id="basic-addon1">Engine No</span>
-            <input type="text" name="engineNo" class="form-control" placeholder="Engine No" aria-describedby="basic-addon2">
+            <input type="text" name="engineNo" required class="form-control" placeholder="Engine No" aria-describedby="basic-addon2">
         </div> </br>
 
         <div class="input-group mb-3">
@@ -72,33 +72,33 @@
 
         <div class="input-group">
             <span class="input-group-addon">Country</span>
-            <input type="text" name="country" class="form-control" placeholder="Country" aria-describedby="basic-addon2">
+            <input type="text" required name="country" class="form-control" placeholder="Country" aria-describedby="basic-addon2">
         </div> </br>
 
         <div class="input-group">
             <span class="input-group-addon">Make</span>
-            <input type="text" name="make" class="form-control" placeholder="Make" aria-describedby="basic-addon2">
+            <input type="text" required name="make" class="form-control" placeholder="Make" aria-describedby="basic-addon2">
         </div> </br>
 
         <div class="input-group">
             <span class="input-group-addon">Model</span>
-            <input type="text" name="model" class="form-control" placeholder="Model" aria-describedby="basic-addon2">
+            <input type="text" required name="model" class="form-control" placeholder="Model" aria-describedby="basic-addon2">
         </div> </br>
 
         <div class="input-group">
             <span class="input-group-addon">Cost</span>
-            <input type="text" name="cost" class="form-control" placeholder="Cost" aria-describedby="basic-addon2">
+            <input type="text" required name="cost" class="form-control" placeholder="Cost" aria-describedby="basic-addon2">
         </div> </br>
 
         <div class="input-group">
             <span class="input-group-addon">Sale Price</span>
-            <input type="text" name="salePrice" class="form-control" placeholder="Sale Price" aria-describedby="basic-addon2">
+            <input type="text" required name="salePrice" class="form-control" placeholder="Sale Price" aria-describedby="basic-addon2">
         </div> </br>
 
 
         <div class="input-group">
             <span class="input-group-addon">Availability</span>
-            <select name="availability" class="form-control"> <option value="Available"> Available </option> <option value="Sold"> Sold </option> </select>
+            <select name="availability" required class="form-control"> <option value="Available"> Available </option> <option value="Sold"> Sold </option> </select>
         </div> </br>
 
         <div class="input-group">

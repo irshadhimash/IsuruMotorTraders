@@ -21,7 +21,7 @@
     <!--Data Table-->
     <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 
-    <title>Inventory</title>
+    <title>Inventory - Isuru Motor Traders</title>
 
 </head>
 
@@ -75,9 +75,11 @@
                     echo "<td>"; echo $row['Country']; echo "</td>";
                     echo "<td>"; echo $row['SalePrice']; echo "</td>";
                     echo "<td>"; echo $row['ListedBy']; echo "</td>";
+                    if( $_SESSION['UserRole'] == 'Admin' ){
                     echo "<td>";
                         echo "<a href='EditVehicle.php?id=$vehicleId'><input type='button' name='editBtn' value=' Edit ' class='btn btn-link' /> </a> | <a href='DeleteVehicle.php?id=$vehicleId'><input type='submit' name='deleteBtn' value='Delete' class='btn btn-link' /> </a>";
                     echo "</td>";
+                    }
                 echo "</tr>";
             }
             

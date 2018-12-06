@@ -12,7 +12,7 @@
     }else{
         $resultSet = $inventoryObj->getVehicleForEdit($_GET['id']);
         $vehicle = $resultSet->fetch_assoc();
-    }    
+    }
 
 ?>
 
