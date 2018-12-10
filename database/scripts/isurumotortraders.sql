@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 17, 2018 at 05:51 PM
+-- Generation Time: Dec 10, 2018 at 05:31 AM
 -- Server version: 5.7.14
 -- PHP Version: 5.6.25
 
@@ -38,6 +38,11 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `CREATEVEHICLE` (IN `RegistrationNo` VARCHAR(10), IN `EngineNo` VARCHAR(50), IN `VehicleClass` VARCHAR(20), IN `Status` VARCHAR(10), IN `FuelType` VARCHAR(10), IN `Country` VARCHAR(15), IN `Make` VARCHAR(15), IN `Model` VARCHAR(15), IN `Cost` INT, IN `SalePrice` INT, IN `UserId` INT, IN `Availability` VARCHAR(10))  NO SQL
 INSERT INTO vehicle (RegistrationNo, EngineNo, VehicleClass, Status, FuelType, Country, Make, Model, Cost, SalePrice, UserId, Availability ) VALUES ( RegistrationNo, EngineNo, VehicleClass, Status, FuelType, Country, Make, Model, Cost, SalePrice, UserId, Availability )$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DELETEVEHICLE` (IN `Id` INT)  NO SQL
+DELETE
+FROM vehicle
+WHERE VehicleId = Id$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GETALLVEHICLES` ()  NO SQL
 SELECT
@@ -85,6 +90,12 @@ FROM vehicle v
 LEFT OUTER JOIN systemuser SU
 	ON V.UserId = SU.UserId
 WHERE V.VehicleId = ID$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UPDATEVEHICLE` (IN `RegistrationNo` VARCHAR(10), IN `EngineNo` VARCHAR(50), IN `VehicleClass` VARCHAR(20), IN `Status` VARCHAR(10), IN `FuelType` VARCHAR(10), IN `Country` VARCHAR(15), IN `Make` VARCHAR(15), IN `Model` VARCHAR(15), IN `Cost` INT, IN `SalePrice` INT, IN `UserId` INT, IN `Availability` VARCHAR(10))  NO SQL
+UPDATE
+	vehicle V
+SET V.RegistrationNo = RegistrationNo, V.EngineNo = EngineNo, V.VehicleClass = VehicleClass, V.Status = Status, V.FuelType = FuelType, V.Country = Country, V.Make = Make, V.Model = Model, V.Cost = Cost, V.SalePrice = SalePrice, V.UserId = UserId, V.Availability = Availability
+WHERE V.RegistrationNo = RegistrationNo$$
 
 DELIMITER ;
 
@@ -188,7 +199,7 @@ CREATE TABLE `systemmodule` (
 
 INSERT INTO `systemmodule` (`SystemModuleID`, `ModuleCode`, `ModuleName`, `ModuleDescription`, `ModuleLink`, `ModuleImage`) VALUES
 (2, 'Inventory', 'Inventory', 'View and manage your vehicle inventory.', 'inventory.php', 'Inventory.png'),
-(3, 'Sales', 'Sales', 'View and manage your sales.', 'sale.php', 'Sales.png'),
+(3, 'Sales', 'Sales', 'View and manage your sales.', 'sales.php', 'Sales.png'),
 (6, 'CustomerPortal', 'Customers', '', '', ''),
 (7, 'TraderPortal', 'Traders', '', '', ''),
 (9, 'Customers', 'Customers', 'View and manage your customers', 'Customers.php', 'customer.png'),
@@ -314,9 +325,14 @@ CREATE TABLE `vehicle` (
 
 INSERT INTO `vehicle` (`VehicleId`, `RegistrationNo`, `EngineNo`, `VehicleClass`, `Status`, `FuelType`, `Country`, `Make`, `Model`, `Cost`, `SalePrice`, `UserId`, `Availability`) VALUES
 (1, 'HD-2433', 'XYASFDE', 'Motor Cycle', 'Used', 'Petrol', 'India', 'Bajaj', 'Pulsar', 87000, 120000, 9, ''),
-(2, 'CAX-0001', 'C2-XDASWR', 'Motor Cycle', 'Used', 'Petrol', 'Japan', 'Yamaha', 'FZ', 234000, 255000, 1, 'Available'),
-(3, 'asdas', 'asdas', 'Car', 'New', 'Diesel', 'asdasd', 'asdadwq', 'wqeqwe', 4452411, 4752411, 1, 'Available'),
-(4, 'adawew', 'qwewqe', 'Van', 'New', 'Diesel', 'adad', 'adad', 'adswqeqw', 4452411, 4752411, 1, 'Available');
+(2, 'CAX-0001', 'C2-XDASWR', 'Motor Cycle', 'Used', 'Petrol', 'Japan', 'Yamaha', 'xyz', 234000, 255000, 1, 'Available'),
+(4, 'adawew', 'qwewqe', 'Van', 'New', 'Diesel', 'adad', 'adad', 'adswqeqw', 4452411, 4752410, 1, 'Available'),
+(6, 'xd-1111', 'casdadd', 'Van', 'New', 'Petrol', 'Japan', 'Yamaha', 'qwe', 100000, 120000, 1, 'Available'),
+(7, 'AF-1234', 'ASDFGHJK', 'Motor Cycle', 'Used', 'Petrol', 'India', 'Hero', 'Splendar', 65000, 85000, 1, 'Available'),
+(8, 'SE-5512', 'QWERTY', 'Car', 'New', 'Diesel', 'Germany', 'BMW', '740Le', 1100000, 1300000, 1, 'Available'),
+(9, 'a', 'a', 'Motor Cycle', 'Used', 'Petrol', 'a', 'a', 'a', 123000, 124000, 1, 'Available'),
+(10, 'DF-1234', 'A', 'Motor Cycle', 'Used', 'Petrol', 'A', 'A', 'A', 123000, 124000, 1, 'Available'),
+(11, 'CF-1234', 'GHGJGK', 'Car', 'New', 'Diesel', 'Germany', 'BMW', '740Le', 1100000, 1200000, 1, 'Available');
 
 --
 -- Indexes for dumped tables
@@ -463,7 +479,7 @@ ALTER TABLE `userlogin`
 -- AUTO_INCREMENT for table `vehicle`
 --
 ALTER TABLE `vehicle`
-  MODIFY `VehicleId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `VehicleId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- Constraints for dumped tables
 --
