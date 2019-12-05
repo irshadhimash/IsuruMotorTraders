@@ -6,7 +6,9 @@ require($_SERVER['DOCUMENT_ROOT'].'/IsuruMotorTraders/models/SaleModel.php');
 
 class AddSaleController extends SaleModel{
 
-    
+    function search( $RegNo ){
+        return $this->getAllVehicleByRegNo($RegNo);
+    }
 
 }
 
