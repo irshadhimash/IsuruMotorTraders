@@ -42,7 +42,7 @@
                         <div class="col-lg-6">
                             <div class="input-group mb-3">
                                 <span class="input-group-addon" id="basic-addon1">Vehicle No</span>
-                                <input type="text" name="RegNoTxt" required class="form-control" placeholder="Format xx-xxxx" aria-describedby="basic-addon1">
+                                <input type="text" name="RegNoTxt" class="form-control" placeholder="Format xx-xxxx" aria-describedby="basic-addon1">
                             </div> </br>
 
                             <div class="input-group">
@@ -64,43 +64,50 @@
                         </tr>
 
                         <?php
-                            
+
                             if ( isset($_POST['searchBtn']) ){
 
                                 $saleObj = new AddSaleController;
                                 $resultSet = $saleObj->search($_POST['RegNoTxt']);
-                                $vehicleId = null;
+                                
                                 while($row = $resultSet->fetch_assoc()){
-                                    $vehicleId = $row['VehicleId'];
+
+                                    $_SESSION['RegistrationNo'] = $row['RegistrationNo'];
+                                    $_SESSION['Make']           = $row['Make'];
+                                    $_SESSION['Model']          = $row['Model'];
+                                    $_SESSION['Cost']           = $row['Cost'];
+                                    
                                     echo "<tr>";
                                         echo "<td>"; echo $row['RegistrationNo']; echo "</td>";
                                         echo "<td>"; echo $row['Make']; echo "</td>";
                                         echo "<td>"; echo $row['Model']; echo "</td>";
                                         echo "<td>"; echo $row['Cost']; echo "</td>";
-                                        echo "<td>"; echo $row['SalePrice']; echo "</td>";
+                                        echo "<td>"; echo '<input type="text" name="SalePrice" value='.$row['SalePrice'].' />'; echo "</td>";
                                     echo "</tr>";
+
                                 }
                                 echo "<tr>";
                                     echo "<td></td>";
                                     echo "<td></td>";
                                     echo "<td></td>";
                                     echo "<td></td>";
-                                    if ($_POST['RegNoTxt'] != ''){
+                                    if ($_SESSION['RegistrationNo'] != ''){
                                         echo "<td> 
-                                            <a href='Bill.php?id=$vehicleId' target='_blank'>
-                                                <button type='button' name='generateBtn' class='btn btn-success'>
+                                                <button type='submit' name='generateBtn' class='btn btn-success'>
                                                     <span class='glyphicon glyphicon-list-alt'> Generate Bill</span>
                                                 </button>
-                                            </a>
                                         </td>";
                                     }
                                 echo "</tr>";
-                                //echo '<p>Vehicle No:'.$row['RegistrationNo'].'</p>';
                             }
-                            /*
+                            
                             if ( isset($_POST['generateBtn']) ){
 
-                            }*/
+                                $saleObj = new AddSaleController;
+                                $saleObj->updateAvailability( $_SESSION['RegistrationNo'] );
+                                $saleObj->createSale( $_SESSION['RegistrationNo'], $_SESSION['UserID'], $_POST['SalePrice'] );
+
+                            }
                             
                         ?>
 

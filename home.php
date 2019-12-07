@@ -37,17 +37,21 @@
     </nav>
 </div>-->
 
-    <div class="container">
+    <div >
 
         <div class="row">
             
+            <!--<div class='col-lg-3'>
+                <p>Sidebar</p>
+            </div>-->
+
             <?php
 
                 $homeObj = new HomeController;
                 $resultSet = $homeObj->getModulesByRoleCode($_SESSION['UserRole']);
 
                 while($row = $resultSet->fetch_assoc()){
-                    echo ("<div class='col-lg-4'>
+                    echo ("<div class='col-lg-3 text-center'>
                                 <a href='".$row['ModuleLink']."'>
                                     <img class='square' src='images/appicons/".$row['ModuleImage']."' alt='Generic placeholder image' width='150' height='150'>
                                 </a>
@@ -57,9 +61,9 @@
                 }
 
             ?>
-            <div class='col-lg-4'>
+            <div class='col-lg-3'>
                 <a href='Reports.php'>
-                    <img class='square' src='images/appicons/reports.php' alt='Generic placeholder image' width='150' height='150'>
+                    <img class='square' src='images/appicons/reports.png' alt='Generic placeholder image' width='150' height='150'>
                 </a>
                 <h2>Reports</h2>
                 <p>View and manage your reports</p>

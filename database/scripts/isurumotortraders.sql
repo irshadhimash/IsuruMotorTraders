@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 07, 2019 at 09:51 AM
+-- Generation Time: Dec 07, 2019 at 07:32 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.2
 
@@ -26,6 +26,9 @@ DELIMITER $$
 --
 -- Procedures
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CREATESALE` (IN `VNo` VARCHAR(10), IN `UserId` INT(10), IN `Price` INT(10))  INSERT INTO sale (VehicleNo, SoldBy, DateSold, SalePrice)
+	VALUES (VNo, UserId, CURRENT_DATE(), Price )$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `CREATEUSER` (IN `istrader` VARCHAR(3), IN `iscustomer` VARCHAR(3), IN `isemployee` VARCHAR(3), IN `firstname` VARCHAR(50), IN `lastname` VARCHAR(50), IN `preferedname` VARCHAR(50), IN `address` VARCHAR(50), IN `gender` VARCHAR(6), IN `DOB` DATE, IN `email` VARCHAR(60), IN `username` VARCHAR(50), IN `hashedpw` VARCHAR(255), IN `isadmin` VARCHAR(3))  BEGIN
 START TRANSACTION;
 
@@ -45,6 +48,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `DELETEVEHICLE` (IN `Id` INT)  NO SQ
 DELETE
 FROM vehicle
 WHERE VehicleId = Id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GETALLSALES` ()  SELECT
+	S.SaleID,
+    s.DateSold,
+    SU.PreferedName AS SoldBy,
+    s.VehicleNo,
+    s.SalePrice
+FROM sale s
+INNER JOIN systemuser SU
+	ON S.SoldBy = SU.UserId$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GETALLVEHICLES` ()  NO SQL
 SELECT
@@ -108,6 +121,10 @@ UPDATE
 	vehicle V
 SET V.RegistrationNo = RegistrationNo, V.EngineNo = EngineNo, V.VehicleClass = VehicleClass, V.Status = Status, V.FuelType = FuelType, V.Country = Country, V.Make = Make, V.Model = Model, V.Cost = Cost, V.SalePrice = SalePrice, V.UserId = UserId, V.Availability = Availability
 WHERE V.RegistrationNo = RegistrationNo$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UPDATEVEHICLEAVAILABILITY` (IN `RegNo` VARCHAR(10))  UPDATE vehicle V
+	SET V.Availability = 'Sold'
+    WHERE V.RegistrationNo = RegNo$$
 
 DELIMITER ;
 
@@ -184,12 +201,19 @@ INSERT INTO `roldemodulelink` (`RoleModuleId`, `RoleId`, `ModuleId`) VALUES
 
 CREATE TABLE `sale` (
   `SaleID` int(11) NOT NULL,
-  `SaleVehicleid` int(11) NOT NULL,
-  `CustomerID` int(11) NOT NULL,
-  `Bill_BillId` int(11) NOT NULL,
-  `InstallmentPayment_InstallmentPaymentId` int(11) NOT NULL,
-  `Customer_CustomerID` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `VehicleNo` varchar(10) NOT NULL,
+  `SoldBy` int(11) NOT NULL,
+  `DateSold` date NOT NULL,
+  `SalePrice` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `sale`
+--
+
+INSERT INTO `sale` (`SaleID`, `VehicleNo`, `SoldBy`, `DateSold`, `SalePrice`) VALUES
+(3, 'HD-2433', 1, '2019-12-07', 127000),
+(4, 'CAX-0001', 1, '2019-12-07', 253000);
 
 -- --------------------------------------------------------
 
@@ -339,13 +363,13 @@ CREATE TABLE `vehicle` (
 
 INSERT INTO `vehicle` (`VehicleId`, `RegistrationNo`, `EngineNo`, `VehicleClass`, `Status`, `FuelType`, `Country`, `Make`, `Model`, `Cost`, `SalePrice`, `UserId`, `Availability`) VALUES
 (1, 'HD-2433', 'XYASFDE', 'Motor Cycle', 'Used', 'Petrol', 'India', 'Bajaj', 'Pulsar', 87000, 120000, 1, 'Sold'),
-(2, 'CAX-0001', 'C2-XDASWR', 'Motor Cycle', 'Used', 'Petrol', 'Japan', 'Yamaha', 'FZ', 234000, 255000, 1, 'Available'),
+(2, 'CAX-0001', 'C2-XDASWR', 'Motor Cycle', 'Used', 'Petrol', 'Japan', 'Yamaha', 'FZ', 234000, 255000, 1, 'Sold'),
 (4, 'adawew', 'qwewqe', 'Van', 'New', 'Diesel', 'adad', 'adad', 'adswqeqw', 4452411, 4752410, 1, 'Available'),
 (6, 'xd-1111', 'casdadd', 'Van', 'New', 'Petrol', 'Japan', 'Yamaha', 'qwe', 100000, 120000, 1, 'Available'),
 (7, 'AF-1234', 'ASDFGHJK', 'Motor Cycle', 'Used', 'Petrol', 'India', 'Hero', 'Splendar', 65000, 85000, 1, 'Available'),
 (8, 'SE-5512', 'QWERTY', 'Car', 'New', 'Diesel', 'Germany', 'BMW', '740Le', 1100000, 1300000, 1, 'Available'),
 (10, 'DF-1234', 'A', 'Motor Cycle', 'Used', 'Petrol', 'A', 'A', 'A', 123000, 0, 1, 'Available'),
-(11, 'CF-1234', 'GHGJGK', 'Car', 'New', 'Diesel', 'Germany', 'BMW', '740Le', 1100000, 0, 1, 'Available');
+(11, 'CF-1234', 'GHGJGK', 'Car', 'New', 'Diesel', 'Germany', 'BMW', '740Le', 1100000, 1270000, 1, 'Available');
 
 --
 -- Indexes for dumped tables
@@ -387,10 +411,7 @@ ALTER TABLE `roldemodulelink`
 -- Indexes for table `sale`
 --
 ALTER TABLE `sale`
-  ADD PRIMARY KEY (`SaleID`),
-  ADD KEY `fk_Sale_Bill1_idx` (`Bill_BillId`),
-  ADD KEY `fk_Sale_InstallmentPayment1_idx` (`InstallmentPayment_InstallmentPaymentId`),
-  ADD KEY `fk_Sale_Customer1_idx` (`Customer_CustomerID`);
+  ADD PRIMARY KEY (`SaleID`);
 
 --
 -- Indexes for table `systemmodule`
@@ -472,7 +493,7 @@ ALTER TABLE `roldemodulelink`
 -- AUTO_INCREMENT for table `sale`
 --
 ALTER TABLE `sale`
-  MODIFY `SaleID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `SaleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `systemmodule`
@@ -507,14 +528,6 @@ ALTER TABLE `vehicle`
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `sale`
---
-ALTER TABLE `sale`
-  ADD CONSTRAINT `fk_Sale_Bill1` FOREIGN KEY (`Bill_BillId`) REFERENCES `bill` (`BillId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Sale_Customer1` FOREIGN KEY (`Customer_CustomerID`) REFERENCES `customer` (`CustomerID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Sale_InstallmentPayment1` FOREIGN KEY (`InstallmentPayment_InstallmentPaymentId`) REFERENCES `installmentpayment` (`InstallmentPaymentId`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `userrolelink`

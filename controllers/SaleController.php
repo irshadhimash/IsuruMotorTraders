@@ -10,6 +10,10 @@ class SaleController extends SaleModel{
         header('location:index.php');
     }
 
+    function getAllSales(){
+        return $this->getSales();
+    }
+
 }
 
 ?>

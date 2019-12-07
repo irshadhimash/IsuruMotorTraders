@@ -32,23 +32,31 @@
  <li class="active">Sales</li>
 </ol>
 
-   <a class="link" href="#"> <span class="glyphicon glyphicon-plus"></span>New Sale </a>
-   </br>
    <table class="table" id="salesTable">
 
-       <tr>
-           <th>Vehicle Registration No</th>
-           <th>Customer</th>
-           <th>Bill</th>
-           <th>Model</th>
-           <th>Status</th>
-           <th>Fuel Type</th>
-           <th>Country</th>
-           <th>Sale Price</th>
-           <th>Sold By</th>
-           <th>Actions</th>
-           
-       </tr>
+        <tr>
+            <th>Date Sold</th>
+            <th>Sold By</th>
+            <th>Vehicle Registration No</th>
+            <th>Sale Price</th>
+        </tr>
+
+        <?php
+                
+            $inventoryObj = new SaleController;
+            $resultSet = $inventoryObj->getAllSales();
+
+            while($row = $resultSet->fetch_assoc()){
+                $vehicleId = $row['VehicleNo'];
+                echo "<tr>";
+                    echo "<td>"; echo $row['DateSold']; echo "</td>";
+                    echo "<td>"; echo $row['SoldBy']; echo "</td>";
+                    echo "<td>"; echo $row['VehicleNo']; echo "</td>";
+                    echo "<td>"; echo $row['SalePrice']; echo "</td>";
+                echo "</tr>";
+            }
+            
+        ?>
 
    </table>
 
