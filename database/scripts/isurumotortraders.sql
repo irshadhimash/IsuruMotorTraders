@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.4
+-- version 4.7.7
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 24, 2019 at 04:30 AM
--- Server version: 5.7.14
--- PHP Version: 5.6.25
+-- Generation Time: Dec 07, 2019 at 09:51 AM
+-- Server version: 10.1.30-MariaDB
+-- PHP Version: 7.2.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -50,7 +52,8 @@ SELECT
     SU.PreferedName AS ListedBy
 FROM vehicle v
 LEFT OUTER JOIN systemuser SU
-	ON V.UserId = SU.UserId$$
+	ON V.UserId = SU.UserId
+    WHERE V.Availability = 'Available'$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GETMODULELISTBYROLECODE` (IN `rolecode` VARCHAR(50))  NO SQL
 SELECT
@@ -63,8 +66,7 @@ INNER JOIN systemmodule SM
 ON RL.ModuleId = SM.SystemModuleID
 WHERE SR.RoleCode = rolecode$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GETUSERFORLOGIN` (IN `username` CHAR(50))  BEGIN
-  SELECT
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GETUSERFORLOGIN` (IN `username` VARCHAR(50))  SELECT
   	SU.UserId,
     SU.FirstName,
     SU.LastName,
@@ -79,8 +81,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GETUSERFORLOGIN` (IN `username` CHA
   	ON SU.UserId = URL.UserId
   LEFT OUTER JOIN systemrole SR
   	ON URL.SystemRoleId = SR.SystemRoleId
-  WHERE SU.username = username;
-END$$
+  WHERE SU.username = username$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GETVEHICLEBYID` (IN `ID` INT(10))  NO SQL
 SELECT
@@ -90,6 +91,17 @@ FROM vehicle v
 LEFT OUTER JOIN systemuser SU
 	ON V.UserId = SU.UserId
 WHERE V.VehicleId = ID$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GETVEHICLEBYREGNO` (IN `RegNo` VARCHAR(10))  READS SQL DATA
+SELECT
+	V.VehicleId,
+    V.RegistrationNo,
+    V.Make,
+    V.Model,
+    V.Cost,
+    V.SalePrice
+FROM vehicle v
+WHERE V.Availability = 'Available' AND V.RegistrationNo = RegNo$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `UPDATEVEHICLE` (IN `RegistrationNo` VARCHAR(10), IN `EngineNo` VARCHAR(50), IN `VehicleClass` VARCHAR(20), IN `Status` VARCHAR(10), IN `FuelType` VARCHAR(10), IN `Country` VARCHAR(15), IN `Make` VARCHAR(15), IN `Model` VARCHAR(15), IN `Cost` INT, IN `SalePrice` INT, IN `UserId` INT, IN `Availability` VARCHAR(10))  NO SQL
 UPDATE
@@ -161,7 +173,8 @@ INSERT INTO `roldemodulelink` (`RoleModuleId`, `RoleId`, `ModuleId`) VALUES
 (2, 1, 2),
 (3, 1, 3),
 (9, 1, 9),
-(10, 1, 10);
+(10, 1, 10),
+(11, 1, 11);
 
 -- --------------------------------------------------------
 
@@ -203,7 +216,8 @@ INSERT INTO `systemmodule` (`SystemModuleID`, `ModuleCode`, `ModuleName`, `Modul
 (6, 'CustomerPortal', 'Customers', '', '', ''),
 (7, 'TraderPortal', 'Traders', '', '', ''),
 (9, 'Customers', 'Customers', 'View and manage your customers', 'Customers.php', 'customer.png'),
-(10, 'Traders', 'Traders', 'View and manage your traders', 'Traders.php', 'traders.png');
+(10, 'Traders', 'Traders', 'View and manage your traders', 'Traders.php', 'traders.png'),
+(11, 'AddSale', 'Add Sale', 'Perform Sale', 'addsale.php', 'AddSale.png');
 
 -- --------------------------------------------------------
 
@@ -324,15 +338,14 @@ CREATE TABLE `vehicle` (
 --
 
 INSERT INTO `vehicle` (`VehicleId`, `RegistrationNo`, `EngineNo`, `VehicleClass`, `Status`, `FuelType`, `Country`, `Make`, `Model`, `Cost`, `SalePrice`, `UserId`, `Availability`) VALUES
-(1, 'HD-2433', 'XYASFDE', 'Motor Cycle', 'Used', 'Petrol', 'India', 'Bajaj', 'Pulsar', 87000, 120000, 9, ''),
-(2, 'CAX-0001', 'C2-XDASWR', 'Motor Cycle', 'Used', 'Petrol', 'Japan', 'Yamaha', 'xyz', 234000, 255000, 1, 'Available'),
+(1, 'HD-2433', 'XYASFDE', 'Motor Cycle', 'Used', 'Petrol', 'India', 'Bajaj', 'Pulsar', 87000, 120000, 1, 'Sold'),
+(2, 'CAX-0001', 'C2-XDASWR', 'Motor Cycle', 'Used', 'Petrol', 'Japan', 'Yamaha', 'FZ', 234000, 255000, 1, 'Available'),
 (4, 'adawew', 'qwewqe', 'Van', 'New', 'Diesel', 'adad', 'adad', 'adswqeqw', 4452411, 4752410, 1, 'Available'),
 (6, 'xd-1111', 'casdadd', 'Van', 'New', 'Petrol', 'Japan', 'Yamaha', 'qwe', 100000, 120000, 1, 'Available'),
 (7, 'AF-1234', 'ASDFGHJK', 'Motor Cycle', 'Used', 'Petrol', 'India', 'Hero', 'Splendar', 65000, 85000, 1, 'Available'),
 (8, 'SE-5512', 'QWERTY', 'Car', 'New', 'Diesel', 'Germany', 'BMW', '740Le', 1100000, 1300000, 1, 'Available'),
-(9, 'a', 'a', 'Motor Cycle', 'Used', 'Petrol', 'a', 'a', 'a', 123000, 124000, 1, 'Available'),
-(10, 'DF-1234', 'A', 'Motor Cycle', 'Used', 'Petrol', 'A', 'A', 'A', 123000, 124000, 1, 'Available'),
-(11, 'CF-1234', 'GHGJGK', 'Car', 'New', 'Diesel', 'Germany', 'BMW', '740Le', 1100000, 1200000, 1, 'Available');
+(10, 'DF-1234', 'A', 'Motor Cycle', 'Used', 'Petrol', 'A', 'A', 'A', 123000, 0, 1, 'Available'),
+(11, 'CF-1234', 'GHGJGK', 'Car', 'New', 'Diesel', 'Germany', 'BMW', '740Le', 1100000, 0, 1, 'Available');
 
 --
 -- Indexes for dumped tables
@@ -430,56 +443,67 @@ ALTER TABLE `vehicle`
 --
 ALTER TABLE `bill`
   MODIFY `BillId` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
   MODIFY `CustomerID` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
   MODIFY `EmployeeID` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `installmentpayment`
 --
 ALTER TABLE `installmentpayment`
   MODIFY `InstallmentPaymentId` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `roldemodulelink`
 --
 ALTER TABLE `roldemodulelink`
-  MODIFY `RoleModuleId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `RoleModuleId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
 --
 -- AUTO_INCREMENT for table `sale`
 --
 ALTER TABLE `sale`
   MODIFY `SaleID` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `systemmodule`
 --
 ALTER TABLE `systemmodule`
-  MODIFY `SystemModuleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `SystemModuleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
 --
 -- AUTO_INCREMENT for table `systemrole`
 --
 ALTER TABLE `systemrole`
   MODIFY `SystemRoleId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT for table `systemuser`
 --
 ALTER TABLE `systemuser`
   MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
 --
 -- AUTO_INCREMENT for table `userlogin`
 --
 ALTER TABLE `userlogin`
   MODIFY `UserLoginID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
 --
 -- AUTO_INCREMENT for table `vehicle`
 --
 ALTER TABLE `vehicle`
   MODIFY `VehicleId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
 --
 -- Constraints for dumped tables
 --
@@ -498,6 +522,7 @@ ALTER TABLE `sale`
 ALTER TABLE `userrolelink`
   ADD CONSTRAINT `fk_User_has_SystemRole_SystemRole1` FOREIGN KEY (`SystemRoleId`) REFERENCES `systemrole` (`SystemRoleId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_User_has_SystemRole_User1` FOREIGN KEY (`UserId`) REFERENCES `systemuser` (`UserId`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

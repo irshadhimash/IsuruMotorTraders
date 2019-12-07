@@ -16,7 +16,7 @@
 	 <link rel="stylesheet" href="css/AppTheme_Main.css">
     <script src="js/bootstrap.js"></script>
 
-    <title>Home</title>
+    <title>Add Sale</title>
     
 </head>
 
@@ -85,19 +85,22 @@
                                     echo "<td></td>";
                                     echo "<td></td>";
                                     echo "<td></td>";
-                                    echo "<td> 
+                                    if ($_POST['RegNoTxt'] != ''){
+                                        echo "<td> 
                                             <a href='Bill.php?id=$vehicleId' target='_blank'>
                                                 <button type='button' name='generateBtn' class='btn btn-success'>
                                                     <span class='glyphicon glyphicon-list-alt'> Generate Bill</span>
                                                 </button>
                                             </a>
                                         </td>";
+                                    }
                                 echo "</tr>";
+                                //echo '<p>Vehicle No:'.$row['RegistrationNo'].'</p>';
                             }
-
+                            /*
                             if ( isset($_POST['generateBtn']) ){
 
-                            }
+                            }*/
                             
                         ?>
 
