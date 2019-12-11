@@ -34,14 +34,14 @@ class SaleModel extends DBModel{
 
     }
 
-    function create( $vehicleNo, $userId, $price ){
+    function create( $vehicleNo, $userId, $price, $paymentMethod, $InitialPayment ){
 
         $connection = $this->initDBConnection();
 
 		if($connection->connect_error){
 			echo "Cannot connect to the database:".$connection->connect_error;
         }else{
-            $sqlQuery = "call CREATESALE('$vehicleNo', $userId, $price)";
+            $sqlQuery = "call CREATESALE('$vehicleNo', $userId, $price, '$paymentMethod', $InitialPayment)";
             $connection->query($sqlQuery);
         }
 
@@ -63,6 +63,25 @@ class SaleModel extends DBModel{
         $connection->close();
         return $result;
         
+    }
+
+    function reverse($saleId, $regNo){
+
+        $connection = $this->initDBConnection();
+
+		if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call REVERSESALE($saleId, '$regNo')";
+            if ( $connection->query($sqlQuery) == true ){
+                header('location:sales.php');
+            }else{
+                echo "Error in: " . $sqlQuery . "<br>" . $connection->error;
+            }
+        }
+
+        $connection->close();
+
     }
 
 }

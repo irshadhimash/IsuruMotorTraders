@@ -14,9 +14,9 @@ class AddSaleController extends SaleModel{
         $this->updateVehicleAvailability( $RegNo );
     }
 
-    function createSale( $vehicleNo, $userId, $price ){
-        $this->create( $vehicleNo, $userId, $price );
-        $link = 'location:bill.php?RegistrationNo='.$_SESSION['RegistrationNo'].'&Make='.$_SESSION['Make'].'&Model='.$_SESSION['Model'].'&SalePrice='.$_POST['SalePrice'];
+    function createSale( $vehicleNo, $userId, $price, $paymentMethod, $InitialPayment ){
+        $this->create( $vehicleNo, $userId, $price, $paymentMethod, $InitialPayment );
+        $link = 'location:bill.php?RegistrationNo='.$_SESSION['RegistrationNo'].'&Make='.$_SESSION['Make'].'&Model='.$_SESSION['Model'].'&SalePrice='.$_POST['SalePrice'].'&PaymentMethod='.$_POST['paymentMethod'].'&InitialPayment='.$_POST['InitialPayment'];
         header($link);
     }
 

@@ -61,7 +61,7 @@
                 }
 
             ?>
-            <div class='col-lg-3'>
+            <div class='col-lg-3 text-center'>
                 <a href='Reports.php'>
                     <img class='square' src='images/appicons/reports.png' alt='Generic placeholder image' width='150' height='150'>
                 </a>

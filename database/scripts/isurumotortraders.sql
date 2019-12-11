@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 07, 2019 at 07:32 PM
+-- Generation Time: Dec 11, 2019 at 05:26 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.2
 
@@ -26,8 +26,8 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `CREATESALE` (IN `VNo` VARCHAR(10), IN `UserId` INT(10), IN `Price` INT(10))  INSERT INTO sale (VehicleNo, SoldBy, DateSold, SalePrice)
-	VALUES (VNo, UserId, CURRENT_DATE(), Price )$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CREATESALE` (IN `VNo` VARCHAR(10), IN `UserId` INT(10), IN `Price` INT(10), IN `CashOrIns` VARCHAR(60), IN `InitPay` INT(10))  INSERT INTO sale (VehicleNo, SoldBy, DateSold, SalePrice, PaymentMethod, InitialPayment)
+	VALUES (VNo, UserId, CURRENT_DATE(), Price, CashOrIns, InitPay )$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `CREATEUSER` (IN `istrader` VARCHAR(3), IN `iscustomer` VARCHAR(3), IN `isemployee` VARCHAR(3), IN `firstname` VARCHAR(50), IN `lastname` VARCHAR(50), IN `preferedname` VARCHAR(50), IN `address` VARCHAR(50), IN `gender` VARCHAR(6), IN `DOB` DATE, IN `email` VARCHAR(60), IN `username` VARCHAR(50), IN `hashedpw` VARCHAR(255), IN `isadmin` VARCHAR(3))  BEGIN
 START TRANSACTION;
@@ -54,10 +54,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GETALLSALES` ()  SELECT
     s.DateSold,
     SU.PreferedName AS SoldBy,
     s.VehicleNo,
-    s.SalePrice
+    s.SalePrice,
+    s.PaymentMethod
 FROM sale s
 INNER JOIN systemuser SU
-	ON S.SoldBy = SU.UserId$$
+	ON S.SoldBy = SU.UserId
+    ORDER BY s.DateSold DESC$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GETALLVEHICLES` ()  NO SQL
 SELECT
@@ -116,6 +118,20 @@ SELECT
 FROM vehicle v
 WHERE V.Availability = 'Available' AND V.RegistrationNo = RegNo$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `REVERSESALE` (IN `ID` INT(11), IN `VNo` VARCHAR(10))  NO SQL
+BEGIN
+START TRANSACTION;
+
+	DELETE FROM sale
+    WHERE SaleID = ID;
+    
+    UPDATE vehicle V
+    SET V.Availability = 'Available'
+    	WHERE V.RegistrationNo = VNo;
+
+COMMIT;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `UPDATEVEHICLE` (IN `RegistrationNo` VARCHAR(10), IN `EngineNo` VARCHAR(50), IN `VehicleClass` VARCHAR(20), IN `Status` VARCHAR(10), IN `FuelType` VARCHAR(10), IN `Country` VARCHAR(15), IN `Make` VARCHAR(15), IN `Model` VARCHAR(15), IN `Cost` INT, IN `SalePrice` INT, IN `UserId` INT, IN `Availability` VARCHAR(10))  NO SQL
 UPDATE
 	vehicle V
@@ -167,7 +183,10 @@ CREATE TABLE `employee` (
 --
 
 CREATE TABLE `installmentpayment` (
-  `InstallmentPaymentId` int(11) NOT NULL
+  `InstallmentPaymentId` int(11) NOT NULL,
+  `SaleId` int(10) NOT NULL,
+  `PaymentDate` date NOT NULL,
+  `AmountPaid` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -204,16 +223,17 @@ CREATE TABLE `sale` (
   `VehicleNo` varchar(10) NOT NULL,
   `SoldBy` int(11) NOT NULL,
   `DateSold` date NOT NULL,
-  `SalePrice` int(11) NOT NULL
+  `SalePrice` int(11) NOT NULL,
+  `PaymentMethod` varchar(60) NOT NULL DEFAULT 'Cash',
+  `InitialPayment` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sale`
 --
 
-INSERT INTO `sale` (`SaleID`, `VehicleNo`, `SoldBy`, `DateSold`, `SalePrice`) VALUES
-(3, 'HD-2433', 1, '2019-12-07', 127000),
-(4, 'CAX-0001', 1, '2019-12-07', 253000);
+INSERT INTO `sale` (`SaleID`, `VehicleNo`, `SoldBy`, `DateSold`, `SalePrice`, `PaymentMethod`, `InitialPayment`) VALUES
+(10, 'HD-2433', 1, '2019-12-11', 120000, 'Installment', 0);
 
 -- --------------------------------------------------------
 
@@ -241,7 +261,7 @@ INSERT INTO `systemmodule` (`SystemModuleID`, `ModuleCode`, `ModuleName`, `Modul
 (7, 'TraderPortal', 'Traders', '', '', ''),
 (9, 'Customers', 'Customers', 'View and manage your customers', 'Customers.php', 'customer.png'),
 (10, 'Traders', 'Traders', 'View and manage your traders', 'Traders.php', 'traders.png'),
-(11, 'AddSale', 'Add Sale', 'Perform Sale', 'addsale.php', 'AddSale.png');
+(11, 'AddSale', 'Checkout', 'Checkout Items.', 'addsale.php', 'AddSale.png');
 
 -- --------------------------------------------------------
 
@@ -363,8 +383,7 @@ CREATE TABLE `vehicle` (
 
 INSERT INTO `vehicle` (`VehicleId`, `RegistrationNo`, `EngineNo`, `VehicleClass`, `Status`, `FuelType`, `Country`, `Make`, `Model`, `Cost`, `SalePrice`, `UserId`, `Availability`) VALUES
 (1, 'HD-2433', 'XYASFDE', 'Motor Cycle', 'Used', 'Petrol', 'India', 'Bajaj', 'Pulsar', 87000, 120000, 1, 'Sold'),
-(2, 'CAX-0001', 'C2-XDASWR', 'Motor Cycle', 'Used', 'Petrol', 'Japan', 'Yamaha', 'FZ', 234000, 255000, 1, 'Sold'),
-(4, 'adawew', 'qwewqe', 'Van', 'New', 'Diesel', 'adad', 'adad', 'adswqeqw', 4452411, 4752410, 1, 'Available'),
+(2, 'CAX-0001', 'C2-XDASWR', 'Motor Cycle', 'Used', 'Petrol', 'Japan', 'Yamaha', 'FZ', 234000, 255000, 1, 'Available'),
 (6, 'xd-1111', 'casdadd', 'Van', 'New', 'Petrol', 'Japan', 'Yamaha', 'qwe', 100000, 120000, 1, 'Available'),
 (7, 'AF-1234', 'ASDFGHJK', 'Motor Cycle', 'Used', 'Petrol', 'India', 'Hero', 'Splendar', 65000, 85000, 1, 'Available'),
 (8, 'SE-5512', 'QWERTY', 'Car', 'New', 'Diesel', 'Germany', 'BMW', '740Le', 1100000, 1300000, 1, 'Available'),
@@ -493,7 +512,7 @@ ALTER TABLE `roldemodulelink`
 -- AUTO_INCREMENT for table `sale`
 --
 ALTER TABLE `sale`
-  MODIFY `SaleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `SaleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `systemmodule`

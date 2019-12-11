@@ -46,6 +46,13 @@ $pdf->Cell(0,10, 'Vehicle No       :'.$_GET['RegistrationNo'] ,0,1);
 $pdf->Cell(0,10, 'Make             :'.$_GET['Make'] ,0,1);
 $pdf->Cell(0,10, 'Model            :'.$_GET['Model'] ,0,1);
 $pdf->Cell(0,10, 'Price            : RS. '.$_GET['SalePrice'] ,0,1);
+$pdf->Cell(0,10, 'Payment Method   :'.$_GET['PaymentMethod'] ,0,1);
+if ( $_GET['PaymentMethod'] == 'Installment' ){
+    $pdf->Cell(0,10, 'Initial Payment   :'.$_GET['InitialPayment'] ,0,1);
+    $monthlyDue = ( $_GET['SalePrice'] - $_GET['InitialPayment'] ) / 12;
+    $pdf->Cell(0,10, 'Monthly Due Amount   :'.$monthlyDue ,0,1);
+}
 
 $pdf->Output();
+
 ?>

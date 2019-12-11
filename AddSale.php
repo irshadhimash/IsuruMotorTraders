@@ -13,10 +13,10 @@
     <!-- BootStrap -->
     <link rel="stylesheet" href="css/bootstrap.css">
     <!-- Main App Style -->
-	 <link rel="stylesheet" href="css/AppTheme_Main.css">
+	<link rel="stylesheet" href="css/AppTheme_Main.css">
     <script src="js/bootstrap.js"></script>
 
-    <title>Add Sale</title>
+    <title>Checkout - Isuru Motor Traders</title>
     
 </head>
 
@@ -41,7 +41,7 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="input-group mb-3">
-                                <span class="input-group-addon" id="basic-addon1">Vehicle No</span>
+                                <span class="input-group-addon" id="basic-addon1">Registration No</span>
                                 <input type="text" name="RegNoTxt" class="form-control" placeholder="Format xx-xxxx" aria-describedby="basic-addon1">
                             </div> </br>
 
@@ -53,16 +53,8 @@
                         </div>
                     </div>
 
-                    <table class="table" id="vehiclesTable">
-
-                        <tr>
-                            <th>Registration No</th>
-                            <th>Make</th>
-                            <th>Model</th>
-                            <th>Cost</th>
-                            <th>Sale Price</th>
-                        </tr>
-
+                    <div class="row">
+                        <div class="col-lg-6">
                         <?php
 
                             if ( isset($_POST['searchBtn']) ){
@@ -77,46 +69,58 @@
                                     $_SESSION['Model']          = $row['Model'];
                                     $_SESSION['Cost']           = $row['Cost'];
                                     
-                                    echo "<tr>";
-                                        echo "<td>"; echo $row['RegistrationNo']; echo "</td>";
-                                        echo "<td>"; echo $row['Make']; echo "</td>";
-                                        echo "<td>"; echo $row['Model']; echo "</td>";
-                                        echo "<td>"; echo $row['Cost']; echo "</td>";
-                                        echo "<td>"; echo '<input type="text" name="SalePrice" value='.$row['SalePrice'].' />'; echo "</td>";
-                                    echo "</tr>";
+                                    echo '<div class="input-group mb-3">
+                                            <span class="input-group-addon" id="basic-addon1">Registration No</span>
+                                            <label name="RegNoTxt" class="form-control" aria-describedby="basic-addon1">'.$row['RegistrationNo'].'<label>
+                                        </div> </br>';
+                                    echo '<div class="input-group mb-3">
+                                        <span class="input-group-addon" id="basic-addon1">Make</span>
+                                        <label name="RegNoTxt" class="form-control" aria-describedby="basic-addon1">'.$row['Make'].'<label>
+                                    </div> </br>';
+                                    echo '<div class="input-group mb-3">
+                                        <span class="input-group-addon" id="basic-addon1">Model</span>
+                                        <label name="RegNoTxt" class="form-control" aria-describedby="basic-addon1">'.$row['Model'].'<label>
+                                    </div> </br>';
+                                    echo '<div class="input-group mb-3">
+                                        <span class="input-group-addon" id="basic-addon1">Cost</span>
+                                        <label name="RegNoTxt" class="form-control" aria-describedby="basic-addon1">'.$row['Cost'].'<label>
+                                    </div> </br>';
+                                    echo '<div class="input-group mb-3">
+                                        <span class="input-group-addon" id="basic-addon1">Sold For</span>
+                                        <input type="number" name="SalePrice" required class="form-control" aria-describedby="basic-addon1" value='.$row['SalePrice'].' />
+                                    </div> </br>';
+                                    echo '<div class="input-group mb-3">
+                                        <span class="input-group-addon" id="basic-addon1">Payment Method</span>
+                                        <select name="paymentMethod" class="form-control"> <option value="Cash"> Cash </option> <option value="Installment"> Installments - 12 Months </option> </select>
+                                    </div> </br>';
+                                    echo '<div class="input-group mb-3">
+                                        <span class="input-group-addon" id="basic-addon1">Initial Payment</span>
+                                        <input type="number" name="InitialPayment" required class="form-control" aria-describedby="basic-addon1" value="0" />
+                                    </div> </br>';
+                                    if ($_SESSION['RegistrationNo'] != ''){
+                                        echo "<button type='submit' name='generateBtn' class='btn btn-success'>
+                                                <span class='glyphicon glyphicon-list-alt'> Generate Bill</span>
+                                            </button>";
+                                    }
 
                                 }
-                                echo "<tr>";
-                                    echo "<td></td>";
-                                    echo "<td></td>";
-                                    echo "<td></td>";
-                                    echo "<td></td>";
-                                    if ($_SESSION['RegistrationNo'] != ''){
-                                        echo "<td> 
-                                                <button type='submit' name='generateBtn' class='btn btn-success'>
-                                                    <span class='glyphicon glyphicon-list-alt'> Generate Bill</span>
-                                                </button>
-                                        </td>";
-                                    }
-                                echo "</tr>";
                             }
-                            
+
                             if ( isset($_POST['generateBtn']) ){
 
                                 $saleObj = new AddSaleController;
                                 $saleObj->updateAvailability( $_SESSION['RegistrationNo'] );
-                                $saleObj->createSale( $_SESSION['RegistrationNo'], $_SESSION['UserID'], $_POST['SalePrice'] );
+                                $saleObj->createSale( $_SESSION['RegistrationNo'], $_SESSION['UserID'], $_POST['SalePrice'], $_POST['paymentMethod'], $_POST['InitialPayment'] );
 
                             }
-                            
-                        ?>
 
-                    </table>
+                            ?>
+                        </div>
+                    </div>
 
                 </form>
             </div>
         </div>
-
     </div>
 
 <body>

@@ -4,7 +4,7 @@
     <div class="navbar-header">
       <!--<img src="images/logo.jpg" width='15' height='15' />
       <a class="navbar-brand " href="#">Isuru Motor Traders</a>-->
-      <a class="navbar-brand navbar-image" href="#"><img src="images/logo.jpg" alt="" width='60' height='60'></a>
+      <a class="navbar-brand navbar-image" href="#"><img src="images/logo.jpg" alt="" width='80' height='80'></a>
     </div>
     <ul class="nav navbar-nav navbar-right">
         <li> <a href="home.php"> <span class="glyphicon glyphicon-home"></span> </a> </li>

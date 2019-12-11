@@ -48,7 +48,7 @@
         <form method="POST" action="#">
             <p> Confirm that you really need to delete the vehicle  </p>
             <a href="inventory.php"> Go back! </a>
-            <input type="submit" name="deleteVehicleBtn" value="Delete!" class="btn btn-success"/>
+            <input type="submit" name="deleteVehicleBtn" value="Delete!" class="btn btn-danger"/>
         </form>
     </div>
 

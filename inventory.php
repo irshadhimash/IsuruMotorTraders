@@ -33,6 +33,7 @@
     
 <div>
 
+<br/>
  <ol class="breadcrumb">
   <li><a href="home.php">Home</a></li>
   <li class="active">Inventory</li>
@@ -77,7 +78,7 @@
                     echo "<td>"; echo $row['ListedBy']; echo "</td>";
                     if( $_SESSION['UserRole'] == 'Admin' ){
                     echo "<td>";
-                        echo "<a href='EditVehicle.php?id=$vehicleId'><input type='button' name='editBtn' value=' Edit ' class='btn btn-link' /> </a> | <a href='DeleteVehicle.php?id=$vehicleId'><input type='submit' name='deleteBtn' value='Delete' class='btn btn-link' /> </a>";
+                        echo "<a href='EditVehicle.php?id=$vehicleId'><input type='button' name='editBtn' value=' Edit ' class='btn btn-link' /> </a> | <a href='DeleteVehicle.php?id=$vehicleId'><input type='submit' name='deleteBtn' value='Delete' class='btn btn-danger' /> </a>";
                     echo "</td>";
                     }
                 echo "</tr>";

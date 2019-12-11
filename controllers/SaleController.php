@@ -14,6 +14,10 @@ class SaleController extends SaleModel{
         return $this->getSales();
     }
 
+    function reverseSale($saleId, $regNo){
+        $this->reverse($saleId, $regNo);
+    }
+
 }
 
 ?>
