@@ -10,3 +10,8 @@
 .headerNav{
     background-color: rbg( 48, 151, 209 ) !important;
 }
+
+body{
+    /*background-color: rgb(195,230,200) !important;*/
+    background-color: whitesmoke !important;
+}
