@@ -10,6 +10,14 @@ class InstallmentPaymentController extends InstallmentPaymentModel{
         return $this->getAllInstallmentPlanVehicles();
     }
 
+    function payInstallment(){
+
+    }
+
+    function payAndSettle(){
+        return $this->getInstallmentDetailsByItem($RegNo);
+    }
+
 }
 
 ?>

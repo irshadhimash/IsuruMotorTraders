@@ -35,9 +35,11 @@
         </ol>
 
         <table class="table" id="installmentsTable">
+            <legend>Vehicles sold under installment plan.</legend>
             <tr>
                 <th>Vehicle Registration No</th>
                 <th>Sold For</th>
+                <th>Initial Payment</th>
                 <th>Installments Left</th>
                 <th>Total Left To Pay</th>
                 <th>Plan Duartion</th>
@@ -50,8 +52,9 @@
 
             while($row = $resultSet->fetch_assoc()){
                 echo "<tr>";
-                    echo "<td>"; echo "<a href='PayInstallment.php.php?id=".$row['SaleID']."' target='_blank'>".$row['VehicleNo']."</a>"; echo "</td>";
+                    echo "<td>"; echo "<a href='MakePayment.php?id=".$row['SaleID']."' target='_blank'>".$row['VehicleNo']."</a>"; echo "</td>";
                     echo "<td>"; echo $row['SalePrice']; echo "</td>";
+                    echo "<td>"; echo $row['InitialPayment']; echo "</td>";
                     echo "<td>"; echo ( 12 - $row['NoOfPayments'] ) ; echo "</td>";
                     echo "<td>"; echo $row['TotalAfterInitial'] - $row['TotalInstallmentsPaid'] ; echo "</td>";
                     echo "<td>"; echo "12 Months"; echo "</td>";

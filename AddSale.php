@@ -30,11 +30,11 @@
 
         <ol class="breadcrumb">
             <li><a href="home.php">Home</a></li>
-            <li class="active">Add Sale</li>
+            <li class="active">Checkout</li>
         </ol>
 
         <div class="panel panel-primary">
-            <div class="panel-heading">Add Items</div>
+            <div class="panel-heading">Search for item to be sold</div>
             <div class="panel-body">
                 <form method="post" action="#">
 
