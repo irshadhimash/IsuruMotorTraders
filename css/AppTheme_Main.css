@@ -12,10 +12,10 @@
 }
 
 body{
-    /*background-color: whitesmoke !important;*/
-    background-color: rgb(195, 176, 145) !important;
+    background-color: whitesmoke !important;
+    /*background-color: rgb(195, 176, 145) !important;*/
 }
 
-.well{
+/*.well{
     background-color: rgb(195, 176, 145) !important;
-}
+}*/

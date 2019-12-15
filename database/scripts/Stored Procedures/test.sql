@@ -23,6 +23,29 @@ SELECT
 	S.SalePrice,
     S.InitialPayment,
     (S.SalePrice - S.InitialPayment) AS TotalAfterInitial,
+    CASE
+    	WHEN IP.AmountPaid > 0
+        	THEN SUM(IP.AmountPaid)
+        ELSE 0
+    END AS TotalInstallmentsPaid,
+    CASE
+    	WHEN IP.AmountPaid IS NULL
+        	THEN 0
+        ELSE COUNT(*)
+    END  AS NoOfPayments
+FROM SALE S 
+LEFT JOIN installmentpayment IP
+	ON S.SaleID = IP.SaleId
+WHERE S.PaymentMethod = 'Installment'
+GROUP BY S.SaleID
+
+/*prev get all installments*/
+SELECT
+	S.SaleID,
+	S.VehicleNo,
+	S.SalePrice,
+    S.InitialPayment,
+    (S.SalePrice - S.InitialPayment) AS TotalAfterInitial,
     SUM(IP.AmountPaid) AS TotalInstallmentsPaid,
     COUNT(*) AS NoOfPayments
 FROM installmentpayment IP

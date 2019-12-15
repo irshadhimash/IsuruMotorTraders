@@ -11,11 +11,15 @@ class InstallmentPaymentController extends InstallmentPaymentModel{
     }
 
     function payInstallment(){
-
+        $this->createPayment($saleId, $amount);
     }
 
-    function payAndSettle(){
-        return $this->getInstallmentDetailsByItem($RegNo);
+    function viewDetailsBySaleId($saleId){
+        return $this->getInstallmentDetailsByItem($saleId);
+    }
+
+    function reverseInstallment($installmentPaymentId){
+        $this->reversePayment($installmentPaymentId);
     }
 
 }

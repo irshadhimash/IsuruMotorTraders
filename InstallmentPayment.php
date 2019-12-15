@@ -35,7 +35,7 @@
         </ol>
 
         <table class="table" id="installmentsTable">
-            <legend>Vehicles sold under installment plan.</legend>
+            <legend>Vehicles sold under installment plan. Click on a vehicle to view details and proceed to payment.</legend>
             <tr>
                 <th>Vehicle Registration No</th>
                 <th>Sold For</th>
@@ -52,7 +52,7 @@
 
             while($row = $resultSet->fetch_assoc()){
                 echo "<tr>";
-                    echo "<td>"; echo "<a href='MakePayment.php?id=".$row['SaleID']."' target='_blank'>".$row['VehicleNo']."</a>"; echo "</td>";
+                    echo "<td>"; echo "<a href='MakePayment.php?id=".$row['SaleID']."&RegNo=".$row['VehicleNo']."&TotalLeft=".($row['TotalAfterInitial'] - $row['TotalInstallmentsPaid'])."' target='_blank'>".$row['VehicleNo']."</a>"; echo "</td>";
                     echo "<td>"; echo $row['SalePrice']; echo "</td>";
                     echo "<td>"; echo $row['InitialPayment']; echo "</td>";
                     echo "<td>"; echo ( 12 - $row['NoOfPayments'] ) ; echo "</td>";

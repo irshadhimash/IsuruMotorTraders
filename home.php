@@ -61,13 +61,13 @@
                 }
 
             ?>
-            <div class='col-lg-3 text-center'>
+            <!--<div class='col-lg-3 text-center'>
                 <a href='Reports.php'>
                     <img class='square' src='images/appicons/reports.png' alt='Generic placeholder image' width='150' height='150'>
                 </a>
                 <h2>Reports</h2>
                 <p>View and manage your reports</p>
-            </div>
+            </div>-->
         </div>
 
     </div>
