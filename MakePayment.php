@@ -48,7 +48,7 @@
 
                     <div class="input-group">
                         <button type="submit" name="payBtn" value="Pay Now" class="btn btn-success">
-                            <span class="glyphicon glyphicon-search" aria-hidden="true"> Pay Now</span>
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"> Pay Now</span>
                         </button>
                     </div> </br>
                 </div>
