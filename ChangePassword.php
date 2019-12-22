@@ -57,7 +57,7 @@
                     </div> </br>
                     <div class="input-group">
                         <button type="submit" name="changePWBtn" value="Pay Now" class="btn btn-success">
-                            <span class="glyphicon glyphicon-search" aria-hidden="false"> Change Password</span>
+                            <span class="glyphicon glyphicon-check" aria-hidden="false"> Change Password</span>
                         </button>
                     </div> </br>
                 </div>
@@ -80,7 +80,6 @@
             echo ("<script type='text/javascript'> alert('New password and its confirmation must match');</script>");
         }
         
-
     }
 
 ?>

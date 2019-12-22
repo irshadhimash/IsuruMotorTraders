@@ -60,6 +60,7 @@ class LoginController extends LoginModel{
 		$_SESSION['PreferedName'] = $this->user['PreferedName'];
 		$_SESSION['IsLoggedIn'] = true;
 		$_SESSION['UserRole'] = $this->user['UserRole'];
+		$_SESSION['HashedPassword'] = $this->user['HashedPassword'];
 		header('location:home.php');
 		
 	}

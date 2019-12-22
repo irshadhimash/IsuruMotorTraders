@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 11, 2019 at 05:26 PM
+-- Generation Time: Dec 22, 2019 at 06:20 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.2
 
@@ -26,6 +26,9 @@ DELIMITER $$
 --
 -- Procedures
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateInstallmentPayment` (IN `SID` INT(10), IN `Amount` INT(10))  INSERT INTO installmentpayment (SaleId, PaymentDate, AmountPaid)
+VALUES (SID, CURRENT_DATE(), Amount)$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `CREATESALE` (IN `VNo` VARCHAR(10), IN `UserId` INT(10), IN `Price` INT(10), IN `CashOrIns` VARCHAR(60), IN `InitPay` INT(10))  INSERT INTO sale (VehicleNo, SoldBy, DateSold, SalePrice, PaymentMethod, InitialPayment)
 	VALUES (VNo, UserId, CURRENT_DATE(), Price, CashOrIns, InitPay )$$
 
@@ -48,6 +51,37 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `DELETEVEHICLE` (IN `Id` INT)  NO SQ
 DELETE
 FROM vehicle
 WHERE VehicleId = Id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllInstallmentBySaleId` (IN `SId` INT(10))  SELECT
+	IP.InstallmentPaymentId,
+	IP.SaleId,
+    IP.PaymentDate,
+    IP.AmountPaid
+FROM installmentpayment IP
+	WHERE IP.SaleId = SId
+ORDER BY IP.InstallmentPaymentId DESC$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllInstallmentPlanVehicles` ()  SELECT
+	S.SaleID,
+	S.VehicleNo,
+	S.SalePrice,
+    S.InitialPayment,
+    (S.SalePrice - S.InitialPayment) AS TotalAfterInitial,
+    CASE
+    	WHEN IP.AmountPaid > 0
+        	THEN SUM(IP.AmountPaid)
+        ELSE 0
+    END AS TotalInstallmentsPaid,
+    CASE
+    	WHEN IP.AmountPaid IS NULL
+        	THEN 0
+        ELSE COUNT(*)
+    END  AS NoOfPayments
+FROM SALE S 
+LEFT JOIN installmentpayment IP
+	ON S.SaleID = IP.SaleId
+WHERE S.PaymentMethod = 'Installment'
+GROUP BY S.SaleID$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GETALLSALES` ()  SELECT
 	S.SaleID,
@@ -80,6 +114,14 @@ ON RL.RoleId = SR.SystemRoleId
 INNER JOIN systemmodule SM
 ON RL.ModuleId = SM.SystemModuleID
 WHERE SR.RoleCode = rolecode$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetPasswordByUserId` (IN `UID` INT(10))  SELECT
+  	SU.UserId,
+    UL.HashedPassword
+  FROM systemuser SU
+  INNER JOIN userlogin UL
+  	ON SU.UserLoginID = UL.UserLoginID
+  WHERE SU.UserId = UID$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GETUSERFORLOGIN` (IN `username` VARCHAR(50))  SELECT
   	SU.UserId,
@@ -118,6 +160,10 @@ SELECT
 FROM vehicle v
 WHERE V.Availability = 'Available' AND V.RegistrationNo = RegNo$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ReverseInstallment` (IN `InstId` INT(11))  DELETE
+FROM installmentpayment
+	WHERE InstallmentPaymentId = InstId$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `REVERSESALE` (IN `ID` INT(11), IN `VNo` VARCHAR(10))  NO SQL
 BEGIN
 START TRANSACTION;
@@ -131,6 +177,10 @@ START TRANSACTION;
 
 COMMIT;
 END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdatePassword` (IN `uname` VARCHAR(50), IN `NewPw` VARCHAR(16))  UPDATE userlogin
+	SET HashedPassword = NewPw
+WHERE username = uname$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `UPDATEVEHICLE` (IN `RegistrationNo` VARCHAR(10), IN `EngineNo` VARCHAR(50), IN `VehicleClass` VARCHAR(20), IN `Status` VARCHAR(10), IN `FuelType` VARCHAR(10), IN `Country` VARCHAR(15), IN `Make` VARCHAR(15), IN `Model` VARCHAR(15), IN `Cost` INT, IN `SalePrice` INT, IN `UserId` INT, IN `Availability` VARCHAR(10))  NO SQL
 UPDATE
@@ -184,10 +234,17 @@ CREATE TABLE `employee` (
 
 CREATE TABLE `installmentpayment` (
   `InstallmentPaymentId` int(11) NOT NULL,
-  `SaleId` int(10) NOT NULL,
-  `PaymentDate` date NOT NULL,
-  `AmountPaid` int(10) NOT NULL
+  `SaleId` int(10) DEFAULT NULL,
+  `PaymentDate` date DEFAULT NULL,
+  `AmountPaid` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `installmentpayment`
+--
+
+INSERT INTO `installmentpayment` (`InstallmentPaymentId`, `SaleId`, `PaymentDate`, `AmountPaid`) VALUES
+(7, 15, '2019-12-15', 7500);
 
 -- --------------------------------------------------------
 
@@ -210,7 +267,8 @@ INSERT INTO `roldemodulelink` (`RoleModuleId`, `RoleId`, `ModuleId`) VALUES
 (3, 1, 3),
 (9, 1, 9),
 (10, 1, 10),
-(11, 1, 11);
+(11, 1, 11),
+(12, 1, 12);
 
 -- --------------------------------------------------------
 
@@ -233,7 +291,10 @@ CREATE TABLE `sale` (
 --
 
 INSERT INTO `sale` (`SaleID`, `VehicleNo`, `SoldBy`, `DateSold`, `SalePrice`, `PaymentMethod`, `InitialPayment`) VALUES
-(10, 'HD-2433', 1, '2019-12-11', 120000, 'Installment', 0);
+(13, 'HD-2433', 1, '2019-12-14', 123000, 'Installment', 12300),
+(14, 'CAX-0001', 1, '2019-12-14', 255000, 'Cash', 255000),
+(15, 'xd-1111', 1, '2019-12-14', 130000, 'Installment', 13000),
+(16, 'AF-1234', 1, '2019-12-15', 91500, 'Installment', 9150);
 
 -- --------------------------------------------------------
 
@@ -246,8 +307,8 @@ CREATE TABLE `systemmodule` (
   `ModuleCode` varchar(50) NOT NULL,
   `ModuleName` varchar(50) DEFAULT NULL,
   `ModuleDescription` varchar(150) NOT NULL,
-  `ModuleLink` varchar(20) NOT NULL,
-  `ModuleImage` varchar(20) NOT NULL
+  `ModuleLink` varchar(30) NOT NULL,
+  `ModuleImage` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -261,7 +322,8 @@ INSERT INTO `systemmodule` (`SystemModuleID`, `ModuleCode`, `ModuleName`, `Modul
 (7, 'TraderPortal', 'Traders', '', '', ''),
 (9, 'Customers', 'Customers', 'View and manage your customers', 'Customers.php', 'customer.png'),
 (10, 'Traders', 'Traders', 'View and manage your traders', 'Traders.php', 'traders.png'),
-(11, 'AddSale', 'Checkout', 'Checkout Items.', 'addsale.php', 'AddSale.png');
+(11, 'AddSale', 'Checkout', 'Checkout Items.', 'addsale.php', 'checkout.png'),
+(12, 'Installment', 'Installment Payments', 'View vehicles under installments plan.', 'InstallmentPayment.php', 'InstallmentPayment.png');
 
 -- --------------------------------------------------------
 
@@ -304,17 +366,18 @@ CREATE TABLE `systemuser` (
   `IsActivated` varchar(3) DEFAULT 'n',
   `IsAdmin` varchar(3) DEFAULT 'n',
   `Address` varchar(50) NOT NULL,
-  `Email` varchar(60) NOT NULL
+  `Email` varchar(60) NOT NULL,
+  `Telephone` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `systemuser`
 --
 
-INSERT INTO `systemuser` (`UserId`, `UserLoginID`, `IsTrader`, `IsCustomer`, `IsEmployee`, `Username`, `FirstName`, `LastName`, `PreferedName`, `Gender`, `DOB`, `IsActive`, `IsActivated`, `IsAdmin`, `Address`, `Email`) VALUES
-(1, 1, 'n', 'n', 'n', 'irshadh', 'Mohomed', 'Irshadh', 'irshadh', 'Male', '1994-09-26', 'y', 'y', 'y', '', ''),
-(9, 8, 'y', 'n', 'n', 'abc', 'abc', 'abc', 'abc', 'Male', '2018-11-14', 'n', 'n', 'n', 'abc', 'abc2@xyz.com'),
-(10, 9, 'y', 'n', 'n', 'sahanaf', 'Fathima', 'Sahana', 'Sahana', 'Female', '1995-10-16', 'n', 'n', 'n', 'Minuwangoda', 'abc@xyz.com');
+INSERT INTO `systemuser` (`UserId`, `UserLoginID`, `IsTrader`, `IsCustomer`, `IsEmployee`, `Username`, `FirstName`, `LastName`, `PreferedName`, `Gender`, `DOB`, `IsActive`, `IsActivated`, `IsAdmin`, `Address`, `Email`, `Telephone`) VALUES
+(1, 1, 'n', 'n', 'n', 'irshadh', 'Mohomed', 'Irshadh', 'irshadh', 'Male', '1994-09-26', 'y', 'y', 'y', '', '', NULL),
+(9, 8, 'y', 'n', 'n', 'abc', 'abc', 'abc', 'abc', 'Male', '2018-11-14', 'n', 'n', 'n', 'abc', 'abc2@xyz.com', NULL),
+(10, 9, 'y', 'n', 'n', 'sahanaf', 'Fathima', 'Sahana', 'Sahana', 'Female', '1995-10-16', 'n', 'n', 'n', 'Minuwangoda', 'abc@xyz.com', NULL);
 
 -- --------------------------------------------------------
 
@@ -383,9 +446,9 @@ CREATE TABLE `vehicle` (
 
 INSERT INTO `vehicle` (`VehicleId`, `RegistrationNo`, `EngineNo`, `VehicleClass`, `Status`, `FuelType`, `Country`, `Make`, `Model`, `Cost`, `SalePrice`, `UserId`, `Availability`) VALUES
 (1, 'HD-2433', 'XYASFDE', 'Motor Cycle', 'Used', 'Petrol', 'India', 'Bajaj', 'Pulsar', 87000, 120000, 1, 'Sold'),
-(2, 'CAX-0001', 'C2-XDASWR', 'Motor Cycle', 'Used', 'Petrol', 'Japan', 'Yamaha', 'FZ', 234000, 255000, 1, 'Available'),
-(6, 'xd-1111', 'casdadd', 'Van', 'New', 'Petrol', 'Japan', 'Yamaha', 'qwe', 100000, 120000, 1, 'Available'),
-(7, 'AF-1234', 'ASDFGHJK', 'Motor Cycle', 'Used', 'Petrol', 'India', 'Hero', 'Splendar', 65000, 85000, 1, 'Available'),
+(2, 'CAX-0001', 'C2-XDASWR', 'Motor Cycle', 'Used', 'Petrol', 'Japan', 'Yamaha', 'FZ', 234000, 255000, 1, 'Sold'),
+(6, 'xd-1111', 'casdadd', 'Van', 'New', 'Petrol', 'Japan', 'Yamaha', 'qwe', 100000, 120000, 1, 'Sold'),
+(7, 'AF-1234', 'ASDFGHJK', 'Motor Cycle', 'Used', 'Petrol', 'India', 'Hero', 'Splendar', 65000, 85000, 1, 'Sold'),
 (8, 'SE-5512', 'QWERTY', 'Car', 'New', 'Diesel', 'Germany', 'BMW', '740Le', 1100000, 1300000, 1, 'Available'),
 (10, 'DF-1234', 'A', 'Motor Cycle', 'Used', 'Petrol', 'A', 'A', 'A', 123000, 0, 1, 'Available'),
 (11, 'CF-1234', 'GHGJGK', 'Car', 'New', 'Diesel', 'Germany', 'BMW', '740Le', 1100000, 1270000, 1, 'Available');
@@ -500,25 +563,25 @@ ALTER TABLE `employee`
 -- AUTO_INCREMENT for table `installmentpayment`
 --
 ALTER TABLE `installmentpayment`
-  MODIFY `InstallmentPaymentId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `InstallmentPaymentId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `roldemodulelink`
 --
 ALTER TABLE `roldemodulelink`
-  MODIFY `RoleModuleId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `RoleModuleId` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `sale`
 --
 ALTER TABLE `sale`
-  MODIFY `SaleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `SaleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `systemmodule`
 --
 ALTER TABLE `systemmodule`
-  MODIFY `SystemModuleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `SystemModuleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `systemrole`

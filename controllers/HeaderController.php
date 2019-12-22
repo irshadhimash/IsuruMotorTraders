@@ -12,10 +12,17 @@ class HeaderController extends HeaderModel{
 
 }
 
-$headerObj = new HeaderController;
+/*$headerObj = new HeaderController;
 
 if ( isset($_POST['logout']) ){
     $headerObj->logout();
+}*/
+
+if ( isset( $_SESSION['UserID'] && $_SESSION['IsLoggedIn'] == true ) ){
+    header('location:home.php');
+}else{
+    header('location:index.php');
 }
 
 ?>
+

@@ -1,3 +1,6 @@
+<?php
+  //require("controllers/HeaderController.php");
+?>
 
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">

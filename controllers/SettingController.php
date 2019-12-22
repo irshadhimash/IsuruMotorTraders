@@ -8,14 +8,10 @@ class SettingController extends SettingModel{
 
     function verify( $currentPW, $confirmedPW ){
 
-        $user = $this->getHashedPasswordByUserID($_SESSION['UserID']);
-
         $SALT = 'This is my password salt!';
-        $currentPW = crypt($currentPW, $SALT);
 
-        if ( $currentPW = $user['HashedPassword'] ){
-            //$this->changePassword();
-            echo ("<script type='text/javascript'> alert('Password changed');</script>");
+        if ( crypt($currentPW, $SALT) == $_SESSION['HashedPassword'] ){
+            $this->updatePassword($_SESSION['Username'], crypt($confirmedPW, $SALT));
         }else{
             echo ("<script type='text/javascript'> alert('Password that you have entered is incorrect, please try again!');</script>");
         }
