@@ -35,6 +35,7 @@
     <h2>Hi <em><?php echo $_SESSION['PreferedName']; ?>! What do you want to do?</em></h2> <hr/>
     <div class="col-lg-2 text-center">
         <div class="list-group">
+            <a href="ChangeUsername.php" class="list-group-item list-group-item-action list-group-item-info">Change My Username</a>
             <a href="#" class="list-group-item list-group-item-action list-group-item-info">Change My Password</a>
             <a href="MyAccount.php" class="list-group-item list-group-item-action list-group-item-info">Update My Details</a>
         </div>

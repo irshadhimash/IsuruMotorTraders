@@ -41,6 +41,7 @@ class SettingModel extends DBModel{
     }
 
     function getUserById( $UserID){
+
         $user = array();
         $connection = $this->initDBConnection();
 
@@ -52,29 +53,52 @@ class SettingModel extends DBModel{
             $user = $result->fetch_assoc();
         }
 
-        //$connection->close();
         return $user;
+
     }
 
-    function checkUsernameAvailability($username){
+    function checkUsernameAvailability($uid, $currentUsername, $newUsername){
 		
-		$connection = $this->initDBConnection();
+        $connection = $this->initDBConnection();
 
         if($connection->connect_error){
 			echo "Cannot connect to the database:".$connection->connect_error;
 		}else{
-			$sqlQuery = "call GETUSERFORLOGIN('$username') ";
+            
+			$sqlQuery = "call GETUSERFORLOGIN('$newUsername') ";
 			$resultSet = $connection->query($sqlQuery);
             $user = $resultSet->fetch_assoc();
-            
-            if ($user['Username'] == null | $user['Username'] == ''){
-                
-                //$this->updateUserByUserId();
 
+            if ($user['Username'] == null | $user['Username'] == ''){
+                //$this->updateUsername( $_SESSION['UserID'], $_POST['currentUsername'], $_POST['newUsername'] );
+                $sqlQuery = "call UpdateUsernameByUserID($uid, '$currentUsername', '$newUsername')";
+                if ( $connection->query($sqlQuery) == true ){
+                    echo ("<script type='text/javascript'> alert('Your username have been updated successfully!');</script>");
+                    $_SESSION['Username'] = $newUsername;
+                }else{
+                    echo "Error in: " . $sqlQuery . "<br>" . $connection->error;
+                }
             }else{
                 echo ("<script type='text/javascript'> alert('Already there is a user with that username. Please pick a different one!');</script>");
             }
 
+        }
+
+    }
+
+    function updateUsername($uid, $currentUsername, $newUsername ){
+
+        $connection = $this->initDBConnection();
+
+		if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call UpdateUsernameByUserID($uid, '$username')";
+            if ( $connection->query($sqlQuery) == true ){
+                echo ("<script type='text/javascript'> alert('Your username have been updated successfully!');</script>");
+            }else{
+                echo "Error in: " . $sqlQuery . "<br>" . $connection->error;
+            }
         }
 
     }

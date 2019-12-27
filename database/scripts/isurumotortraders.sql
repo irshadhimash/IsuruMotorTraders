@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 27, 2019 at 07:27 AM
+-- Generation Time: Dec 27, 2019 at 06:31 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.2
 
@@ -206,6 +206,20 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateUserById` (IN `UID` INT(11), 
 SET
 	FirstName = fname, LastName = lname, PreferedName = pname, Gender = 	gndr, DOB = dbirth, Address = adr, Email = mail, Telephone = tele
 WHERE USERID = UID$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateUsernameByUserID` (IN `UID` INT(11), IN `CurrentUN` VARCHAR(50), IN `NewUN` VARCHAR(50))  BEGIN
+START TRANSACTION;
+
+	UPDATE systemuser
+    	SET username = NewUN
+        WHERE userid = UID;
+        
+    UPDATE userlogin
+    	SET username = NewUN
+        WHERE username = CurrentUN;
+
+COMMIT;
+END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `UPDATEVEHICLE` (IN `RegistrationNo` VARCHAR(10), IN `EngineNo` VARCHAR(50), IN `VehicleClass` VARCHAR(20), IN `Status` VARCHAR(10), IN `FuelType` VARCHAR(10), IN `Country` VARCHAR(15), IN `Make` VARCHAR(15), IN `Model` VARCHAR(15), IN `Cost` INT, IN `SalePrice` INT, IN `UserId` INT, IN `Availability` VARCHAR(10))  NO SQL
 UPDATE
