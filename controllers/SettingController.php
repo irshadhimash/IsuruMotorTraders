@@ -18,6 +18,14 @@ class SettingController extends SettingModel{
 
     }
 
+    function getUser(){
+        return $this->getUserById( $_SESSION['UserID']);
+    }
+
+    function updateUser(){
+        $this->updateUserById( $_SESSION['UserID'], $_POST['fname'], $_POST['lname'], $_POST['pname'], $_POST['gender'], $_POST['dob'], $_POST['address'], $_POST['email'], $_POST['telephone'] );
+    }
+
 }
 
 ?>

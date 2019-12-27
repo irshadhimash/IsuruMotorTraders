@@ -36,7 +36,7 @@
     <div class="col-lg-2 text-center">
         <div class="list-group">
             <a href="ChangePassword.php" class="list-group-item list-group-item-action list-group-item-info">Change My Password</a>
-            <a href="#" class="list-group-item list-group-item-action list-group-item-info">Update My Details</a>
+            <a href="MyAccount.php" class="list-group-item list-group-item-action list-group-item-info">Update My Details</a>
         </div>
     </div>
     <div class="col-lg-10 text-left">

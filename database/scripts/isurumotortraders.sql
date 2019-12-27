@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 22, 2019 at 06:20 PM
+-- Generation Time: Dec 27, 2019 at 07:27 AM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.2
 
@@ -123,6 +123,25 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetPasswordByUserId` (IN `UID` INT(
   	ON SU.UserLoginID = UL.UserLoginID
   WHERE SU.UserId = UID$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetUserById` (IN `UID` INT(11))  SELECT
+	CASE
+    	WHEN IsAdmin = 'y' THEN 'System Admin'
+        WHEN IsEmployee = 'y' THEN 'Employee'
+        WHEN IsCustomer = 'y' THEN 'Customer'
+        WHEN IsTrader = 'y' THEN 'Trader'
+    END AS Role,
+	SU.Username,
+    SU.FirstName,
+    SU.LastName,
+    SU.PreferedName,
+    SU.Gender,
+    SU.DOB,
+    SU.Address,
+    SU.Email,
+    SU.Telephone
+FROM systemuser SU
+WHERE SU.UserId = UID$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GETUSERFORLOGIN` (IN `username` VARCHAR(50))  SELECT
   	SU.UserId,
     SU.FirstName,
@@ -181,6 +200,12 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdatePassword` (IN `uname` VARCHAR(50), IN `NewPw` VARCHAR(16))  UPDATE userlogin
 	SET HashedPassword = NewPw
 WHERE username = uname$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateUserById` (IN `UID` INT(11), IN `fname` VARCHAR(50), IN `lname` VARCHAR(50), IN `pname` VARCHAR(50), IN `gndr` VARCHAR(6), IN `dbirth` DATE, IN `adr` VARCHAR(50), IN `mail` VARCHAR(60), IN `tele` VARCHAR(10))  UPDATE
+	systemuser
+SET
+	FirstName = fname, LastName = lname, PreferedName = pname, Gender = 	gndr, DOB = dbirth, Address = adr, Email = mail, Telephone = tele
+WHERE USERID = UID$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `UPDATEVEHICLE` (IN `RegistrationNo` VARCHAR(10), IN `EngineNo` VARCHAR(50), IN `VehicleClass` VARCHAR(20), IN `Status` VARCHAR(10), IN `FuelType` VARCHAR(10), IN `Country` VARCHAR(15), IN `Make` VARCHAR(15), IN `Model` VARCHAR(15), IN `Cost` INT, IN `SalePrice` INT, IN `UserId` INT, IN `Availability` VARCHAR(10))  NO SQL
 UPDATE
@@ -375,7 +400,7 @@ CREATE TABLE `systemuser` (
 --
 
 INSERT INTO `systemuser` (`UserId`, `UserLoginID`, `IsTrader`, `IsCustomer`, `IsEmployee`, `Username`, `FirstName`, `LastName`, `PreferedName`, `Gender`, `DOB`, `IsActive`, `IsActivated`, `IsAdmin`, `Address`, `Email`, `Telephone`) VALUES
-(1, 1, 'n', 'n', 'n', 'irshadh', 'Mohomed', 'Irshadh', 'irshadh', 'Male', '1994-09-26', 'y', 'y', 'y', '', '', NULL),
+(1, 1, 'n', 'n', 'n', 'irshadh', 'Suleiman', 'Irshadh', 'Suleiman', 'Male', '1994-09-26', 'y', 'y', 'y', 'Colombo', 'abc@xyz.com', '0777374206'),
 (9, 8, 'y', 'n', 'n', 'abc', 'abc', 'abc', 'abc', 'Male', '2018-11-14', 'n', 'n', 'n', 'abc', 'abc2@xyz.com', NULL),
 (10, 9, 'y', 'n', 'n', 'sahanaf', 'Fathima', 'Sahana', 'Sahana', 'Female', '1995-10-16', 'n', 'n', 'n', 'Minuwangoda', 'abc@xyz.com', NULL);
 

@@ -39,7 +39,7 @@
             <th>Date Sold</th>
             <th>Sold By</th>
             <th>Vehicle Registration No</th>
-            <th>Saol For</th>
+            <th>Sold For</th>
             <th>Payment Method</th>
             <th>Actions</th>
         </tr>
