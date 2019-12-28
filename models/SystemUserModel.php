@@ -31,6 +31,21 @@ class SystemUserModel extends DBModel{
         
 	}
 
+	function getTraders(){
+
+		$connection = $this->initDBConnection();
+
+		if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call GetAllTraders()";
+            $result = $connection->query($sqlQuery);
+        }
+
+        $connection->close();
+        return $result;
+	}
+
 }
 
 ?>

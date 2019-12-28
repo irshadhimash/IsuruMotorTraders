@@ -91,7 +91,7 @@
 </div>
 <script type="text/javascript">
 $(document).ready( function () {
-    $('#vehicles').DataTable();
+    $('#vehiclesTable').DataTable();
 } );
 </script>    
 

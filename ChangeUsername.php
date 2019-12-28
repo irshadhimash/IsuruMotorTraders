@@ -21,6 +21,7 @@
     <!-- Main App Style -->
 	<link rel="stylesheet" href="css/AppTheme_Main.css">
     <script src="js/bootstrap.js"></script>
+    <script src="js/jQuery.js"></script>
 
     <title>Change Password - Isuru Motor Traders</title>
     
@@ -71,9 +72,3 @@
 </body>
 
 </html>
-
-<?php
-
-    
-
-?>

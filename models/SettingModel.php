@@ -68,6 +68,8 @@ class SettingModel extends DBModel{
 			$sqlQuery = "call GETUSERFORLOGIN('$newUsername') ";
 			$resultSet = $connection->query($sqlQuery);
             $user = $resultSet->fetch_assoc();
+            $resultSet->close();
+            $connection->next_result();
 
             if ($user['Username'] == null | $user['Username'] == ''){
                 //$this->updateUsername( $_SESSION['UserID'], $_POST['currentUsername'], $_POST['newUsername'] );

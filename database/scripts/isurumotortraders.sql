@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 27, 2019 at 06:31 PM
+-- Generation Time: Dec 28, 2019 at 06:49 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.2
 
@@ -95,14 +95,24 @@ INNER JOIN systemuser SU
 	ON S.SoldBy = SU.UserId
     ORDER BY s.DateSold DESC$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllTraders` ()  SELECT
+	SU.UserId,
+    SU.PreferedName,
+    SU.Address,
+    SU.Email,
+    SU.Telephone
+FROM systemuser SU
+WHERE SU.IsTrader = 'y'$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GETALLVEHICLES` ()  NO SQL
 SELECT
 	V.*,
     SU.PreferedName AS ListedBy
 FROM vehicle v
-LEFT OUTER JOIN systemuser SU
+INNER JOIN systemuser SU
 	ON V.UserId = SU.UserId
-    WHERE V.Availability = 'Available'$$
+    WHERE V.Availability = 'Available'
+    	AND SU.IsTrader <> 'y'$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GETMODULELISTBYROLECODE` (IN `rolecode` VARCHAR(50))  NO SQL
 SELECT
@@ -414,7 +424,7 @@ CREATE TABLE `systemuser` (
 --
 
 INSERT INTO `systemuser` (`UserId`, `UserLoginID`, `IsTrader`, `IsCustomer`, `IsEmployee`, `Username`, `FirstName`, `LastName`, `PreferedName`, `Gender`, `DOB`, `IsActive`, `IsActivated`, `IsAdmin`, `Address`, `Email`, `Telephone`) VALUES
-(1, 1, 'n', 'n', 'n', 'irshadh', 'Suleiman', 'Irshadh', 'Suleiman', 'Male', '1994-09-26', 'y', 'y', 'y', 'Colombo', 'abc@xyz.com', '0777374206'),
+(1, 1, 'n', 'n', 'n', 'irshadh', 'Suleiman', 'Irshadh', 'Irshadh', 'Male', '1994-09-26', 'y', 'y', 'y', 'Colombo', 'abc@xyz.com', '0777374206'),
 (9, 8, 'y', 'n', 'n', 'abc', 'abc', 'abc', 'abc', 'Male', '2018-11-14', 'n', 'n', 'n', 'abc', 'abc2@xyz.com', NULL),
 (10, 9, 'y', 'n', 'n', 'sahanaf', 'Fathima', 'Sahana', 'Sahana', 'Female', '1995-10-16', 'n', 'n', 'n', 'Minuwangoda', 'abc@xyz.com', NULL);
 
