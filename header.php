@@ -1,5 +1,11 @@
 <?php
-  //require("controllers/HeaderController.php");
+    require("controllers/HeaderController.php");
+
+    if ( isset($_POST['logout']) ){
+        $headerObj = new HeaderController;
+        $headerObj->logout();
+    }
+
 ?>
 
 <!--<nav class="navbar navbar-inverse">
@@ -34,8 +40,8 @@
                 }
             ?>
         </ul>
-        <form class="form-inline my-2 my-lg-0 text-right">
-            <button class="btn btn-outline-danger my-2 my-sm-0" type="submit"> <span class='fas fa-sign-out-alt'></span> Sign Out</button>
+        <form method="post" action="#" class="form-inline my-2 my-lg-0 text-right">
+            <button class="btn btn-outline-danger my-2 my-sm-0" type="submit" name='logout'> <span class='fas fa-sign-out-alt'></span> Sign Out</button>
         </form>
     </div>
 </nav>

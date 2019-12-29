@@ -13,6 +13,16 @@ class UserController extends SystemUserModel{
 
     }
 
+    function deleteUser( $userid ){
+        
+        $msg = $this->delete( $userid );
+
+        if ( $msg == 'success' ){
+		    header('location:Traders.php');
+        }
+
+    }
+
 }
 
 ?>

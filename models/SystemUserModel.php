@@ -46,6 +46,30 @@ class SystemUserModel extends DBModel{
         return $result;
 	}
 
+	function delete( $userid ){
+
+		$connection = $this->initDBConnection();
+
+		if($connection->connect_error){
+
+			echo "Cannot connect to the database:".$connection->connect_error;
+
+		}else{
+
+			$sqlQuery = "call DeleteUser( $userid )";
+			if ( $connection->query($sqlQuery) == true ){
+				$connection->close();
+				return 'success';
+			}else{
+				echo "Error in: " . $sqlQuery . "<br>" . $connection->error;
+				$connection->close();
+				return 'failed';
+			}
+
+        }
+
+	}
+
 }
 
 ?>

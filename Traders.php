@@ -59,7 +59,7 @@
                                     <p>".$row['Email']."</p>
                                     <p>".$row['Telephone']."</p>");
                                     if( $_SESSION['UserRole'] == 'Admin' ){
-                                        echo "<p><a href='#?id=$userId'><button name='deleteBtn' value='Delete Trader' class='btn btn-danger'> <span class='fas fa-trash-alt'></span> Delete Trader </button> </a></p>";
+                                        echo "<p><a href='DeleteUser.php?id=$userId&Name=".$row['PreferedName']."'><button name='deleteBtn' value='Delete Trader' class='btn btn-danger'> <span class='fas fa-trash-alt'></span> Delete Trader </button> </a></p>";
                                     }
                     echo ("
                                 </div>
