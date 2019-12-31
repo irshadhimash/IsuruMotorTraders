@@ -15,6 +15,8 @@ class TraderSignUpController extends SystemUserModel{
 			$sqlQuery = "call GETUSERFORLOGIN('$username') ";
 			$resultSet = $connection->query($sqlQuery);
             $user = $resultSet->fetch_assoc();
+            $resultSet->close();
+            $connection->next_result();
             
             if ($user['Username'] == null | $user['Username'] == ''){
                 

@@ -52,9 +52,9 @@
                     echo (
                         "<div class='col-lg-8'>
                             <div class='media position-relative'>
-                                <img src='fontawesome/svgs/solid/camera.svg' class='mr-3' alt='...' width='30px' height='30px'>
+                                <img src='fontawesome/svgs/solid/user.svg' class='mr-3' alt='...' width='30px' height='30px'>
                                 <div class='media-body'>
-                                    <h5 class='mt-0'><a href='#?id=$userId'> ".$row['PreferedName']." </a></h5>
+                                    <h5 class='mt-0'><a href='TraderInventory.php?id=$userId&Name=".$row['PreferedName']."'> ".$row['PreferedName']." </a></h5>
                                     <p>".$row['Address']."</p>
                                     <p>".$row['Email']."</p>
                                     <p>".$row['Telephone']."</p>");

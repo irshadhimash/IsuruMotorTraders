@@ -17,9 +17,13 @@ class InventoryModel extends DBModel{
             $sqlQuery = "call CREATEVEHICLE('$RegistrationNo', '$EngineNo', '$VehicleClass', '$Status',
                          '$FuelType', '$Country', '$Make', '$Model', '$Cost', '$SalePrice', $UserId, '$Availability')";
             if ( $connection->query($sqlQuery) == true ){
-                return 'success';//header('location:inventory.php');
+                if ( $_SESSION['SystemRole'] == 'System Admin' || $_SESSION['SystemRole'] == 'Employee' ){ 
+                    header('location:inventory.php');
+                }elseif( $_SESSION['SystemRole'] == 'Trader' ){
+                    header('location:TraderPortal.php');
+                }
             }else{
-                return $connection->error;
+                echo "Error in: " . $sqlQuery . "<br>" . $connection->error;
             }
         }
         $connection->close();
@@ -68,7 +72,11 @@ class InventoryModel extends DBModel{
             $sqlQuery = "call UPDATEVEHICLE('$RegistrationNo', '$EngineNo', '$VehicleClass', '$Status',
                             '$FuelType', '$Country', '$Make', '$Model', '$Cost', '$SalePrice', $UserId, '$Availability')";
             if ( $connection->query($sqlQuery) == true ){
-                header('location:inventory.php');
+                if ( $_SESSION['SystemRole'] == 'System Admin' || $_SESSION['SystemRole'] == 'Employee' ){ 
+                    header('location:inventory.php');
+                }elseif( $_SESSION['SystemRole'] == 'Trader' ){
+                    header('location:TraderPortal.php');
+                }
             }else{
                 echo "Error in: " . $sqlQuery . "<br>" . $connection->error;
             }
@@ -87,7 +95,45 @@ class InventoryModel extends DBModel{
         }else{
             $sqlQuery = "call DELETEVEHICLE('$id')";
             if ( $connection->query($sqlQuery) == true ){
-                header('location:inventory.php');
+                if ( $_SESSION['SystemRole'] == 'System Admin' || $_SESSION['SystemRole'] == 'Employee' ){ 
+                    header('location:inventory.php');
+                }elseif( $_SESSION['SystemRole'] == 'Trader' ){
+                    header('location:TraderPortal.php');
+                }
+            }else{
+                echo "Error in: " . $sqlQuery . "<br>" . $connection->error;
+            }
+        }
+
+        $connection->close();
+
+    }
+
+    function getVehicleByUserId( $UserId ){
+
+        $connection = $this->initDBConnection();
+
+		if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call GetVehicleByListedUserId($UserId)";
+            $result = $connection->query($sqlQuery);
+        }
+
+        $connection->close();
+        return $result;
+    }
+
+    function markVehicleAsInterested( $vehicleID, $userId, $UserName ){
+
+        $connection = $this->initDBConnection();
+
+		if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call MarkVehicleInterested($vehicleID)";
+            if ( $connection->query($sqlQuery) == true ){
+                header("location:TraderInventory.php?id=$userId&Name=".$UserName);
             }else{
                 echo "Error in: " . $sqlQuery . "<br>" . $connection->error;
             }

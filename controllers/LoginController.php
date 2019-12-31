@@ -4,7 +4,6 @@
 session_start();
 
 require($_SERVER['DOCUMENT_ROOT'].'/IsuruMotorTraders/models/LoginModel.php');
-//require('SessionValidatorController.php');
 
 class LoginController extends LoginModel{
 
@@ -61,7 +60,14 @@ class LoginController extends LoginModel{
 		$_SESSION['IsLoggedIn'] = true;
 		$_SESSION['UserRole'] = $this->user['UserRole'];
 		$_SESSION['HashedPassword'] = $this->user['HashedPassword'];
-		header('location:home.php');
+		$_SESSION['SystemRole'] = $this->user['SystemRole'];
+		if ( $_SESSION['SystemRole'] == 'System Admin' || $_SESSION['SystemRole'] == 'Employee' ){ 
+			header('location:home.php');
+		}elseif( $_SESSION['SystemRole'] == 'Trader' ){
+			header('location:TraderPortal.php');
+		}elseif( $_SESSION['SystemRole'] == 'Customer' ){
+			header('location:CustomerPortal.php');
+		}
 		
 	}
 

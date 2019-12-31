@@ -44,8 +44,13 @@
 
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="home.php">Home</a></li>
-            <li class="breadcrumb-item"><a href="inventory.php">Inventory</a></li>
+            <?php
+                if ( $_SESSION['SystemRole'] == 'System Admin' || $_SESSION['SystemRole'] == 'Employee' ){ 
+                    echo ("
+                    <li class='breadcrumb-item'><a href='home.php'>Home</a></li>
+                    <li class='breadcrumb-item'><a href='inventory.php'>Inventory</a></li>");
+                }
+            ?>
             <li class="breadcrumb-item active" aria-current="page">Delete Vehicle</li>
         </ol>
     </nav>

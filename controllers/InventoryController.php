@@ -17,11 +17,15 @@ class InventoryController extends InventoryModel{
         
         $msg = $this->create($registrationNo, $engineNo, $vehicleClass, $condition, $fuelType, $country, $make, $model, $cost, $salePrice, $UserId, $availability);
 
-        if( $msg == 'success'){
-            echo ("<script type='text/javascript'> alert('Vehicle Added');</script>");
+        /*if( $msg == 'success'){
+            if ( $_SESSION['SystemRole'] == 'System Admin' || $_SESSION['SystemRole'] == 'Employee' ){ 
+                header('location:inventory.php');
+            }elseif( $_SESSION['SystemRole'] == 'Trader' ){
+                header('location:TraderPortal.php');
+            }
         }else{
             echo ("<script type='text/javascript'> alert('Failed".$msg."');</script>");
-        }
+        }*/
 
     }
 
