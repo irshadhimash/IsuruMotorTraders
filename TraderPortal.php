@@ -1,6 +1,15 @@
 
 <?php
     require('controllers/InventoryController.php');
+
+    $inventoryModel = new InventoryModel;
+    $preferedVehicles = $inventoryModel->getPreferedVehicleCountByTraderId( $_SESSION['UserID'] );
+    $preferedVehicleCount = $preferedVehicles->fetch_assoc();
+    $purchasedVehicles = $inventoryModel->getPurchasedVehicleCountByTraderId( $_SESSION['UserID'] );
+    $purchasedVehicleCount = $purchasedVehicles->fetch_assoc();
+    $_SESSION['PreferedVehicleCount'] = $preferedVehicleCount['PreferedVehicleCount'];
+    $_SESSION['PurchasedVehicleCount'] = $purchasedVehicleCount['PurchasedVehicleCount'];
+
 ?>
 
 <!DOCTYPE html>
@@ -33,20 +42,27 @@
     <div>
 
         <br/>
-        <h2> Hi <?php echo $_SESSION['PreferedName'] ?>! Your dashboard for today is as follows. </h2>
+        <h2> Hi <em><?php echo $_SESSION['PreferedName'] ?></em>! Your dashboard for today is as follows. </h2>
 
         <br/>
         <div class="row">
             <div class='col-lg-3 text-center'>
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <strong>3 listings of interest!</strong>
-                    <p>Isuru Motor Traders prefers 3 out of your listings below.</p>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong> <?php echo $_SESSION['PurchasedVehicleCount']; ?> vehicles purchased!</strong>
+                    <p>Isuru Motor Traders purchased <?php echo $_SESSION['PurchasedVehicleCount']; ?> of your vehicles.</p>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
             </div>
             <div class='col-lg-3'>
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong><?php echo $_SESSION['PreferedVehicleCount']; ?> listings of interest!</strong>
+                    <p>Isuru Motor Traders prefers <?php echo $_SESSION['PreferedVehicleCount']; ?> out of your listings below.</p>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
             </div>
             <div class='col-lg-3'>
             </div>
@@ -62,15 +78,15 @@
             <tr>
                 <th>Vehicle Class</th>
                 <th>Registration No</th>
+                <th>Availability</th>
                 <th>Make</th>
                 <th>Model</th>
-                <th>Status</th>
+                <th>Condition</th>
                 <th>Fuel Type</th>
                 <th>Country</th>
                 <th>Sale Price</th>
-                <th>Listed By</th>
                 <th>Actions</th>
-                
+                <th></th>
             </tr>
 
             <?php
@@ -82,19 +98,27 @@
                     $vehicleId = $row['VehicleId'];
                     echo "<tr>";
                         echo "<td>"; echo $row['VehicleClass']; echo "</td>";
-                        echo "<td>"; 
-                            echo "<a class='text-white' href='EditVehicle.php?id=$vehicleId'> ".$row['RegistrationNo']." </a>";//echo $row['VehicleClass']; 
+                        echo "<td class='text-white'>";
+                        if( $row['IsPurchasedByClient'] == 1 ){
+                            echo $row['RegistrationNo'];
+                        }else{
+                            echo "<a class='text-white' href='EditVehicle.php?id=$vehicleId'> ".$row['RegistrationNo']." </a>";
+                        }
                         echo "</td>";
+                        echo "<td>"; echo $row['Availability']; echo "</td>";
                         echo "<td>"; echo $row['Make']; echo "</td>";
                         echo "<td>"; echo $row['Model']; echo "</td>";
                         echo "<td>"; echo $row['Status']; echo "</td>";
                         echo "<td>"; echo $row['FuelType']; echo "</td>";
                         echo "<td>"; echo $row['Country']; echo "</td>";
                         echo "<td>"; echo $row['SalePrice']; echo "</td>";
-                        echo "<td>"; echo $row['ListedBy']; echo "</td>";
-                        echo "<td>";
-                            echo "<a class='text-white' href='EditVehicle.php?id=$vehicleId'><input type='button' name='editBtn' value=' Edit ' class='btn btn-link' /> </a> | <a href='DeleteVehicle.php?id=$vehicleId'><button type='submit' name='deleteBtn' value='Delete' class='btn btn-danger'> <span class='fas fa-trash-alt'></span> Delete </button> </a>";
-                        echo "</td>";
+                        if( $row['IsPurchasedByClient'] == 1 ){
+                            echo "<td>Vehicle has been purchased!</td>";
+                        }else{
+                            echo "<td>";
+                                echo "<a class='text-white' href='EditVehicle.php?id=$vehicleId'><input type='button' name='editBtn' value=' Edit ' class='btn btn-link' /> </a> | <a href='DeleteVehicle.php?id=$vehicleId'><button type='submit' name='deleteBtn' value='Delete' class='btn btn-danger'> <span class='fas fa-trash-alt'></span> Delete </button> </a>";
+                            echo "</td>";
+                        }
                     echo "</tr>";
                 }
                 

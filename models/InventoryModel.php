@@ -143,6 +143,59 @@ class InventoryModel extends DBModel{
 
     }
 
+    function purchase( $vehicleId ){
+
+        $connection = $this->initDBConnection();
+
+		if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call PurchaseVehicle($vehicleId)";
+            if ( $connection->query($sqlQuery) == true ){
+                header('location:Traders.php');
+            }else{
+                echo "Error in: " . $sqlQuery . "<br>" . $connection->error;
+            }
+        }
+
+        $connection->close();
+
+    }
+
+    function getPreferedVehicleCountByTraderId( $userId ){
+
+        $connection = $this->initDBConnection();
+
+		if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call GetPreferedVehicleCountByTraderId( $userId )";
+            $result = $connection->query($sqlQuery);
+            //$result->close();
+            $connection->next_result();
+        }
+
+        //$connection->close();
+        return $result;
+        
+    }
+
+    function getPurchasedVehicleCountByTraderId( $userId ){
+
+        $connection = $this->initDBConnection();
+
+		if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call GetPurchasedVehicleCountByTraderId( $userId )";
+            $result = $connection->query($sqlQuery);
+        }
+
+        //$connection->close();
+        return $result;
+        
+    }
+
     function getReportByCountry(){
 
         $connection = $this->initDBConnection();

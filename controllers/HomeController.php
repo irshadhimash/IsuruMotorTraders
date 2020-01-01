@@ -12,15 +12,34 @@ class HomeController extends SystemModuleModel{
         
     }
 
-    /*foreach($_SESSION['ModuleList'] as $module){
-        echo ("<div class='col-lg-4'>
-            <a href='#'>
-                <img class='square' src='images/appicons/money.png' alt='Generic placeholder image' width='180' height='180'>
-            </a>
-            <h2>".$module['1']."</h2>
-            <p>View and manage your costs, revenue and profit.</p>
-        </div> ");
-    }*/
+    function getTotalSalesByMonth(){
+
+        $connection = $this->initDBConnection();
+
+        if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call GetTotalSalesByMonth";
+            $result = $connection->query($sqlQuery);
+            $connection->next_result();
+        }
+        return $result;
+    }
+
+    function getTotalInstallmentSalesByMonth(){
+
+        $connection = $this->initDBConnection();
+
+        if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call GetTotalInstallmentSalesByMonth";
+            $result = $connection->query($sqlQuery);
+        }
+
+        $connection->close();
+        return $result;
+    }
 
 }
 

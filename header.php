@@ -23,7 +23,18 @@
 </nav>-->
 
 <nav class="navbar navbar-dark bg-dark">
-    <a class="navbar-brand" href="home.php">
+    <?php
+        if ( $_SESSION['SystemRole'] == 'System Admin' || $_SESSION['SystemRole'] == 'Employee' ){ 
+            echo ("
+            <a class='navbar-brand' href='home.php'>");
+        }elseif( $_SESSION['SystemRole'] == 'Trader' ){
+            echo ("
+            <a class='navbar-brand' href='TraderPortal.php'>");
+        }elseif( $_SESSION['SystemRole'] == 'Customer' ){
+            echo ("
+            <a class='navbar-brand' href='CustomerPortal.php'>");
+        }
+    ?>
         <img src="images/logo.jpg" width="50" height="50" alt=""> Isuru Motor Traders
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">

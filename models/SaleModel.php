@@ -84,4 +84,16 @@ class SaleModel extends DBModel{
 
     }
 
+    function getTotalSalesByMonth(){
+        if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call GetTotalSalesByMonth";
+            $result = $connection->query($sqlQuery);
+        }
+
+        $connection->close();
+        return $result;
+    }
+
 }

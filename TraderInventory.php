@@ -60,6 +60,7 @@
                             <th>Country</th>
                             <th>Sale Price</th>
                             <th>Mark Interested</th>
+                            <th>Purchase</th>
                         </tr>");
                     while($row = $resultSet->fetch_assoc()){
                         $vehicleId = $row['VehicleId'];
@@ -72,7 +73,18 @@
                             echo "<td>"; echo $row['FuelType']; echo "</td>";
                             echo "<td>"; echo $row['Country']; echo "</td>";
                             echo "<td>"; echo $row['SalePrice']; echo "</td>";
-                            echo "<td> <a href='MarkInterested.php?vehicleID=$vehicleId&id=".$_GET['id']."&Name=".$_GET['Name']."'> <button type='button' name='markInterestedBtn' class='btn btn-success'> <span class='fas fa-magic'></span> </button> </a> ";
+                            if( $row['IsClientInterested'] == 1 ){ 
+                                echo "<td>Interested</td>";
+                            }else{
+                                echo "<td> <a href='MarkInterested.php?vehicleID=$vehicleId&id=".$_GET['id']."&Name=".$_GET['Name']."'> <button type='button' name='markInterestedBtn' class='btn btn-success'> <span class='fas fa-magic'></span> </button> </a> </td>";
+                            }
+                            if( $row['IsClientInterested'] == 1 ){
+                                if( $row['IsPurchasedByClient'] == 1 ){
+                                    echo "<td>Purchased</td>";
+                                }else{
+                                    echo "<td> <a href='ConfirmPurchase.php?vehicleID=$vehicleId&VNo=".$row['RegistrationNo']."&UserId=".$_GET['id']."&Name=".$_GET['Name']."'> <button type='button' name='purchaseBtn' class='btn btn-success'> <span class='fas fa-dolly'></span> </button> </a> </td>";
+                                }
+                            }
                         echo "</tr>";
                     }
                 }else{

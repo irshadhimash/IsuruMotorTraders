@@ -30,8 +30,19 @@
 <div class="well">
 
 <ol class="breadcrumb">
-  <li><a href="home.php">Home</a></li>
-  <li><a href="inventory.php">Inventory</a></li>
+    <?php
+        if ( $_SESSION['SystemRole'] == 'System Admin' || $_SESSION['SystemRole'] == 'Employee' ){ 
+            echo ("
+            <li class='breadcrumb-item'><a href='home.php'>Home</a></li>
+            <li><a href='inventory.php'>Inventory</a></li>");
+        }elseif( $_SESSION['SystemRole'] == 'Trader' ){
+            echo ("
+            <li class='breadcrumb-item'><a href='TraderPortal.php'>Home</a></li>");
+        }elseif( $_SESSION['SystemRole'] == 'Customer' ){
+            echo ("
+            <li class='breadcrumb-item'><a href='CustomerPortal.php'>Home</a></li>");
+        }
+    ?>
   <li class="active">Add Vehicle</li>
 </ol>
 

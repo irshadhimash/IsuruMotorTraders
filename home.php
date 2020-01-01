@@ -1,6 +1,14 @@
 
 <?php
     require("controllers/HomeController.php");
+    $saleModel = new HomeController;
+    $totalSales = $saleModel->getTotalSalesByMonth();
+    $totalSalesCount = $totalSales->fetch_assoc();
+    $totalInstallmentSales = $saleModel->getTotalInstallmentSalesByMonth();
+    $totalInstallmentSalesCount = $totalInstallmentSales->fetch_assoc();
+    $_SESSION['TotalSalesCount'] = $totalSalesCount['TotalSales'];
+    $_SESSION['SaleMonth'] = $totalSalesCount['CurrentMonth'];
+    $_SESSION['TotalInstallmentSalesCount'] = $totalInstallmentSalesCount['TotalInstallmentSales'];
 ?>
 
 <!DOCTYPE html>
@@ -36,8 +44,8 @@
         <div class="row">
             <div class='col-lg-3 text-center'>
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <strong>3 total vehicles under installment plan!</strong>
-                    <p>During the month of December.</p>
+                    <strong><?php echo $_SESSION['TotalInstallmentSalesCount']; ?> vehicles sold under installment plan!</strong>
+                    <p>During the month of <?php echo $_SESSION['SaleMonth']; ?>.</p>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -45,8 +53,8 @@
             </div>
             <div class='col-lg-3'>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>4 total sales!</strong>
-                    <p>During the month of December.</p>
+                    <strong><?php echo $_SESSION['TotalSalesCount']; ?> total sales!</strong>
+                    <p>During the month of <?php echo $_SESSION['SaleMonth']; ?>.</p>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
