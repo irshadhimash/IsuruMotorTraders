@@ -7,7 +7,7 @@ class InventoryModel extends DBModel{
 
     private $result = null;
 
-    function create($RegistrationNo, $EngineNo, $VehicleClass, $Status, $FuelType, $Country, $Make, $Model, $Cost, $SalePrice, $UserId, $Availability){
+    function create($RegistrationNo, $EngineNo, $VehicleClass, $Status, $FuelType, $Country, $Make, $Model, $Cost, $SalePrice, $UserId, $Availability, $isPurchased){
 
         $connection = $this->initDBConnection();
 
@@ -15,7 +15,7 @@ class InventoryModel extends DBModel{
 			echo "Cannot connect to the database:".$connection->connect_error;
 		}else{
             $sqlQuery = "call CREATEVEHICLE('$RegistrationNo', '$EngineNo', '$VehicleClass', '$Status',
-                         '$FuelType', '$Country', '$Make', '$Model', '$Cost', '$SalePrice', $UserId, '$Availability')";
+                         '$FuelType', '$Country', '$Make', '$Model', '$Cost', '$SalePrice', $UserId, '$Availability', $isPurchased)";
             if ( $connection->query($sqlQuery) == true ){
                 if ( $_SESSION['SystemRole'] == 'System Admin' || $_SESSION['SystemRole'] == 'Employee' ){ 
                     header('location:inventory.php');
@@ -204,10 +204,25 @@ class InventoryModel extends DBModel{
 			echo "Cannot connect to the database:".$connection->connect_error;
         }else{
             $sqlQuery = "SELECT
-                            COUNT(*) as Count,
-                            Country
-                        FROM VEHICLE V
-                        GROUP BY Country";
+            COUNT(*) as Count,
+            v.vehicleclass,
+            Country
+        FROM VEHICLE V
+        GROUP BY Country, vehicleclass";
+            $result = $connection->query($sqlQuery);
+        }
+
+        $connection->close();
+        return $result;
+    }
+
+    function getVehicleCountByCountryForReport(){
+        $connection = $this->initDBConnection();
+
+        if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call Report_GetVehicleCountByCountry";
             $result = $connection->query($sqlQuery);
         }
 

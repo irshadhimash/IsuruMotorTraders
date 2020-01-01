@@ -18,6 +18,10 @@ class SaleController extends SaleModel{
         $this->reverse($saleId, $regNo);
     }
 
+    function getSalesThisMonth(){
+        return $this->getSalesThisMonthForReport();
+    }
+
 }
 
 ?>

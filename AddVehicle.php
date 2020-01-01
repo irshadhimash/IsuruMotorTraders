@@ -129,8 +129,15 @@
 if ( isset($_POST['addVehicleBtn']) ){
 
     $inventoryObj = new InventoryController;
-    $inventoryObj->addVehicle($_POST['registrationNo'], $_POST['engineNo'], $_POST['vehicleClass'], $_POST['condition'], $_POST['fuelType'],
-                     $_POST['country'], $_POST['make'], $_POST['model'], $_POST['cost'], $_POST['salePrice'], $_SESSION['UserID'], $_POST['availability']);
+
+    if( $_SESSION['SystemRole'] == 'System Admin' || $_SESSION['SystemRole'] == 'Employee' ){
+        $inventoryObj->addVehicle($_POST['registrationNo'], $_POST['engineNo'], $_POST['vehicleClass'], $_POST['condition'], $_POST['fuelType'],
+                     $_POST['country'], $_POST['make'], $_POST['model'], $_POST['cost'], $_POST['salePrice'], $_SESSION['UserID'], $_POST['availability'], 1);
+    }elseif( $_SESSION['SystemRole'] == 'Trader' ){
+        $inventoryObj->addVehicle($_POST['registrationNo'], $_POST['engineNo'], $_POST['vehicleClass'], $_POST['condition'], $_POST['fuelType'],
+                     $_POST['country'], $_POST['make'], $_POST['model'], $_POST['cost'], $_POST['salePrice'], $_SESSION['UserID'], $_POST['availability'], 0);
+    }
+    
 
 }
 

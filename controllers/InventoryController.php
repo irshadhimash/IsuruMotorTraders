@@ -13,9 +13,9 @@ class InventoryController extends InventoryModel{
 
     }
 
-    function addVehicle($registrationNo, $engineNo, $vehicleClass, $condition, $fuelType, $country, $make, $model, $cost, $salePrice, $UserId, $availability){
+    function addVehicle($registrationNo, $engineNo, $vehicleClass, $condition, $fuelType, $country, $make, $model, $cost, $salePrice, $UserId, $availability, $isPurchased){
         
-        $msg = $this->create($registrationNo, $engineNo, $vehicleClass, $condition, $fuelType, $country, $make, $model, $cost, $salePrice, $UserId, $availability);
+        $this->create($registrationNo, $engineNo, $vehicleClass, $condition, $fuelType, $country, $make, $model, $cost, $salePrice, $UserId, $availability, $isPurchased );
 
         /*if( $msg == 'success'){
             if ( $_SESSION['SystemRole'] == 'System Admin' || $_SESSION['SystemRole'] == 'Employee' ){ 
@@ -47,8 +47,8 @@ class InventoryController extends InventoryModel{
 
     }
 
-    function getReport(){
-        return $this->getReportByCountry();
+    function getVehicleCountByCountry(){
+        return $this->getVehicleCountByCountryForReport();
     }
 
 }

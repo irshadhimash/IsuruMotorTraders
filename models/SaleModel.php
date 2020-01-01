@@ -96,4 +96,20 @@ class SaleModel extends DBModel{
         return $result;
     }
 
+    function getSalesThisMonthForReport(){
+
+        $connection = $this->initDBConnection();
+
+        if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call Report_GetSalesThisMonth";
+            $result = $connection->query($sqlQuery);
+        }
+
+        $connection->close();
+        return $result;
+
+    }
+
 }
