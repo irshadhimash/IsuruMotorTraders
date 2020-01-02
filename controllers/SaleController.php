@@ -22,6 +22,22 @@ class SaleController extends SaleModel{
         return $this->getSalesThisMonthForReport();
     }
 
+    function getCashSaleProfitDataForReport(){
+        return $this->getCashSaleProfitData();
+    }
+
+    function getCashSaleProfitTotalDataForReport(){
+        return $this->getCashSaleProfitData_Total();
+    }
+
+    function getInstallmentSaleProfitDataForReport(){
+        return $this->getInstallmentSaleProfitData();
+    }
+
+    function getInstallmentSaleProfitTotalDataForReport(){
+        return $this->getInstallmentSaleProfitData_Total();
+    }
+
 }
 
 ?>

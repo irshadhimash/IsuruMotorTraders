@@ -43,6 +43,22 @@
     <div class="row">
 
         <div class='col-lg-3 text-center'>
+            <a href='Report_ProfitAnalysisCashSales.php' target='_BLANK'>
+                <img class='square' src='images/appicons/Report.png'width='150' height='150'>
+            </a>
+            <h2>Profit Analysis - Cash Sales</h2>
+            <p>View profit analysis of cash sales for this month.</p>
+        </div>
+
+        <div class='col-lg-3 text-center'>
+            <a href='Report_ProfitAnalysisInstallmentSales.php' target='_BLANK'>
+                <img class='square' src='images/appicons/Report.png'width='150' height='150'>
+            </a>
+            <h2>Profit Analysis - Installment Sales</h2>
+            <p>View profit analysis of Installment sales.</p>
+        </div>
+
+        <div class='col-lg-3 text-center'>
             <a href='Report_SalesThisMonth.php' target='_BLANK'>
                 <img class='square' src='images/appicons/Report.png'width='150' height='150'>
             </a>

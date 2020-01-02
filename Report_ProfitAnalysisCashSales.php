@@ -9,14 +9,20 @@ class PDF extends FPDF{
     function LoadData()
     {
         $saleObj = new SaleController;
-        return $saleObj->getSalesThisMonth();
+        return $saleObj->getCashSaleProfitDataForReport();
+    }
+
+    function LoadSummary(){
+        $saleObj = new SaleController;
+        $result = $saleObj->getCashSaleProfitTotalDataForReport();
+        return $result->fetch_assoc();
     }
 
     function Header()
     {
         // Logo
         $this->Image('images/logo.jpg',10,6,30);
-        // times bold 15
+        // Arial bold 15
         $this->SetFont('times','B',15);
         // Move to the right
         $this->Cell(50);
@@ -26,6 +32,22 @@ class PDF extends FPDF{
         $this->Ln(20);
     }
 
+    // data summary
+    function GenerateSummary( $summary ){
+        
+        $this->Cell(0,10, '' ,0,1);
+        $this->SetFont('times','B',14);
+        $this->Cell($w[3],6,'Cost, Revenue and Profit summary of cash sales for the month of '.$summary['Month'],'B',0,'L',$fill);
+        $this->Ln(9);
+        $this->SetFont('times','',13);
+        $this->Cell($w[3],6,'   * Total Revenue: '.number_format($summary['TotalRevenue']),'',0,'L',$fill);
+        $this->Ln(6);
+        $this->Cell($w[3],6,'   * Total Cost: '.number_format($summary['TotalCOST']),'',0,'L',$fill);
+        $this->Ln(6);
+        $this->Cell($w[3],6,'   * Total Profit: '.number_format($summary['TotalProfit']),'',0,'L',$fill);
+        $this->Cell(0,10, '' ,0,1);
+
+    }
     // data table
     function GenerateTable($header, $data)
     {
@@ -35,6 +57,7 @@ class PDF extends FPDF{
         $this->SetDrawColor(128,0,0);
         $this->SetLineWidth(.3);
         $this->SetFont('','B');
+        //$this->Cell(0,20,'Cost, Revenue and Profit of each vehicle sale during this month.',0,0,'L');
         // Header
         $w = array(40, 35, 40, 45);
         for($i=0;$i<count($header);$i++)
@@ -43,15 +66,15 @@ class PDF extends FPDF{
         // Color and font restoration
         $this->SetFillColor(224,235,255);
         $this->SetTextColor(0);
-        $this->SetFont('times','',13);
+        $this->SetFont('');
         // Data
         $fill = false;
         while($row = $data->fetch_assoc())
         {
             $this->Cell($w[3],6,$row['VehicleNo'],'LR',0,'L',$fill);
-            $this->Cell($w[3],6,number_format($row['SalePrice']),'LR',0,'R',$fill);
-            $this->Cell($w[3],6,$row['PaymentMethod'],'LR',0,'L',$fill);
-            $this->Cell($w[3],6,$row['DateSold'],'LR',0,'L',$fill);
+            $this->Cell($w[3],6,number_format($row['Revenue']),'LR',0,'R',$fill);
+            $this->Cell($w[3],6,number_format($row['COST']),'LR',0,'R',$fill);
+            $this->Cell($w[3],6,number_format($row['Profit']),'LR',0,'R',$fill);
             $this->Ln();
             $fill = !$fill;
         }
@@ -62,16 +85,15 @@ class PDF extends FPDF{
 
 $pdf = new PDF();
 // Column headings
-$header = array('Vehicle NO', 'Amount Sold For', 'Payment Method', 'Date Sold');
+$header = array('Vehicle NO', 'Revenue', 'COST', 'Profit');
 // Data loading
 $data = $pdf->LoadData();
+$summary = $pdf->LoadSummary();
 $pdf->Cell(0,10, '' ,0,1);
 $pdf->SetFont('times','',14);
 $pdf->AddPage();
-$pdf->Cell(0,10, '' ,0,1);
-$pdf->SetFont('times','B',14);
-$pdf->Cell($w[3],6,'Sales summary of this month.','B',0,'L',$fill);
-$pdf->Ln(10);
+
+$pdf->GenerateSummary($summary);
 $pdf->GenerateTable($header, $data);
 
 $pdf->Output();

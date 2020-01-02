@@ -17,13 +17,11 @@ class PDF extends FPDF{
         // Logo
         $this->Image('images/logo.jpg',10,6,30);
         // Arial bold 15
-        $this->SetFont('Arial','B',15);
+        $this->SetFont('Times','B',15);
         // Move to the right
         $this->Cell(50);
         // Title
         $this->Cell(30,10,'Isuru Motor Traders',0,0,'C');
-        $this->SetFont('Arial','',10);
-        $this->Cell(3,20,'Vehicle count by each country.',0,0,'R');
         // Line break
         $this->Ln(20);
     }
@@ -45,7 +43,7 @@ class PDF extends FPDF{
         // Color and font restoration
         $this->SetFillColor(224,235,255);
         $this->SetTextColor(0);
-        $this->SetFont('');
+        $this->SetFont('times','',13);
         // Data
         $fill = false;
         while($row = $data->fetch_assoc())
@@ -69,6 +67,10 @@ $data = $pdf->LoadData();
 $pdf->Cell(0,10, '' ,0,1);
 $pdf->SetFont('times','',14);
 $pdf->AddPage();
+$pdf->Cell(0,10, '' ,0,1);
+$pdf->SetFont('times','B',14);
+$pdf->Cell($w[3],6,'Number of available vehicles by each country.','B',0,'L',$fill);
+$pdf->Ln(10);
 $pdf->GenerateTable($header, $data);
 
 $pdf->Output();

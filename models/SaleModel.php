@@ -112,4 +112,70 @@ class SaleModel extends DBModel{
 
     }
 
+    function getCashSaleProfitData(){
+
+        $connection = $this->initDBConnection();
+
+        if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call Report_ProfitAnalysisCashSales";
+            $result = $connection->query($sqlQuery);
+            $connection->next_result();
+        }
+
+        $connection->close();
+        return $result;
+
+    }
+
+    function getCashSaleProfitData_Total(){
+
+        $connection = $this->initDBConnection();
+
+        if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call Report_ProfitAnalysisCashSales_Total";
+            $result = $connection->query($sqlQuery);
+        }
+
+        $connection->close();
+        return $result;
+
+    }
+
+    function getInstallmentSaleProfitData(){
+
+        $connection = $this->initDBConnection();
+
+        if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call Report_ProfitAnalysisInstallmentSales";
+            $result = $connection->query($sqlQuery);
+            $connection->next_result();
+        }
+
+        $connection->close();
+        return $result;
+
+    }
+
+    function getInstallmentSaleProfitData_Total(){
+
+        $connection = $this->initDBConnection();
+
+        if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call Report_ProfitAnalysisInstallmentSales_Total";
+            $result = $connection->query($sqlQuery);
+        }
+
+        $connection->close();
+        return $result;
+
+    }
+
 }
