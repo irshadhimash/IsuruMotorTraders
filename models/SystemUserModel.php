@@ -7,6 +7,39 @@ class SystemUserModel extends DBModel{
 	
 	private $user = array();
 
+
+	function GetAll(){
+		
+		$connection = $this->initDBConnection();
+
+		if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call GetAllUsers()";
+            $result = $connection->query($sqlQuery);
+        }
+
+        $connection->close();
+		return $result;
+		
+	}
+
+	function GetUserById( $userid ){
+		
+		$connection = $this->initDBConnection();
+
+		if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call GetUserById($userid)";
+            $result = $connection->query($sqlQuery);
+        }
+
+        $connection->close();
+		return $result;
+		
+	}
+
     function create( $istrader, $iscustomer, $isemployee, $firstname, $lastname, $preferedname, $address, $gender, $DOB, $email, $username, $hashedpw, $isadmin ){
 
         $connection = $this->initDBConnection();

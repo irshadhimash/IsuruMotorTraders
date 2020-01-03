@@ -28,7 +28,7 @@
     <!-- Main App Style -->
 	 <link rel="stylesheet" href="css/AppTheme_Main.css">
 
-    <title>Home</title>
+    <title>Home - Isuru Motor Traders</title>
     
 </head>
 

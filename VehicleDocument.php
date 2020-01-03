@@ -19,7 +19,7 @@
     <!-- Main App Style -->
 	 <link rel="stylesheet" href="css/AppTheme_Main.css">
 
-    <title>Traders - Isuru Motor Traders</title>
+    <title>Documents - Isuru Motor Traders</title>
 
 </head>
 

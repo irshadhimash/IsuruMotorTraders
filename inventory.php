@@ -44,7 +44,7 @@
         </ol>
     </nav>
 
-    <a class="link" href="AddVehicle.php"> <span class="glyphicon glyphicon-plus"></span> Add New Vehicle </a>
+    <a href='AddVehicle.php'> <h2><span class='fas fa-plus'></span> Add Vehicle</h2> </a>
     </br>
     <table class="table" id="vehiclesTable">
 

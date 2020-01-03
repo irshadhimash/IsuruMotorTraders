@@ -1,5 +1,6 @@
+
 <?php
-    require("controllers/InstallmentPaymentController.php");
+    require('controllers/UserController.php');
 ?>
 
 <!DOCTYPE html>
@@ -18,16 +19,16 @@
     <!-- Main App Style -->
 	 <link rel="stylesheet" href="css/AppTheme_Main.css">
 
-    <title>Installment Payments - Isuru Motor Traders</title>
-    
+    <title>System Users - Isuru Motor Traders</title>
+
 </head>
 
 <body>
-
+    
     <header>
         <?php require("header.php"); ?>
     </header>
-
+        
     <div>
 
         <nav aria-label="breadcrumb">
@@ -44,43 +45,40 @@
                         <li class='breadcrumb-item'><a href='CustomerPortal.php'>Home</a></li>");
                     }
                 ?>
-                <li class="breadcrumb-item active" aria-current="page">Installment Payments</li>
+                <li class='breadcrumb-item'><a href='SystemConfiguration.php'>System Configuration</a></li>
+                <li class="breadcrumb-item active" aria-current="page">System Users</li>
             </ol>
         </nav>
 
-        <table class="table" id="installmentsTable">
-            <legend>Vehicles sold under installment plan. Click on a vehicle to view details and proceed to payment.</legend>
-            <tr>
-                <th>Vehicle Registration No</th>
-                <th>Sold For</th>
-                <th>Initial Payment</th>
-                <th>Installments Left</th>
-                <th>Total Left To Pay</th>
-                <th>Plan Duartion</th>
-                <th>Monthly Due</th>
-            </tr>
-            <?php
-                
-            $installmentObj = new InstallmentPaymentController;
-            $resultSet = $installmentObj->getAllInstallments();
+        <a href='CreateUser.php'> <h2><span class='fas fa-plus'></span> Add User</h2> </a>
+        <h2>Below are the users in the system. Click on a user change its labels.</h2>
+        <br/>
+        <div class='col-lg-3'>
+        </div>
+        <?php
+                    
+                $userObj = new UserController;
+                $resultSet = $userObj->GetAllUsers();
 
-            while($row = $resultSet->fetch_assoc()){
-                echo "<tr>";
-                    echo "<td>"; echo "<a href='MakePayment.php?id=".$row['SaleID']."&RegNo=".$row['VehicleNo']."&TotalLeft=".($row['TotalAfterInitial'] - $row['TotalInstallmentsPaid'])."' target='_blank'>".$row['VehicleNo']."</a>"; echo "</td>";
-                    echo "<td>"; echo $row['SalePrice']; echo "</td>";
-                    echo "<td>"; echo $row['InitialPayment']; echo "</td>";
-                    echo "<td>"; echo ( 12 - $row['NoOfPayments'] ) ; echo "</td>";
-                    echo "<td>"; echo $row['TotalAfterInitial'] - $row['TotalInstallmentsPaid'] ; echo "</td>";
-                    echo "<td>"; echo "12 Months"; echo "</td>";
-                    echo "<td>"; echo ($row['TotalAfterInitial'] - $row['TotalInstallmentsPaid']) / ( 12 - $row['NoOfPayments'] ) ; echo "</td>";
-                echo "</tr>";
-            }
-            
-            ?>
-        </table>
+                while($row = $resultSet->fetch_assoc()){
+                    $userId = $row['UserId'];
+                    echo (
+                        "<div class='col-lg-8'>
+                            <div class='media position-relative'>
+                                <img src='fontawesome/svgs/solid/user.svg' class='mr-3' alt='...' width='30px' height='30px'>
+                                <div class='media-body'>
+                                    <h5 class='mt-0'><a href='SystemUserDetail.php?UserId=$userId'>".$row['PreferedName']."</a></h5>
+                                    <p>".$row['Role']."</p>
+                                    <p>".$row['Telephone']."</p>");
+                    echo ("
+                                </div>
+                            </div>
+                        </div>");
+                }
+        ?>    
 
     </div>
 
-<body>
+</body>
 
 </html>
