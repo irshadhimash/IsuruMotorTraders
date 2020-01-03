@@ -91,6 +91,47 @@ class UserController extends SystemUserModel{
         
     }
 
+    function ValidateEmailTelephoneForPasswordReset(){
+
+        $isTelephoneNoValid = false;
+        $isEmailValid = false;
+        $isPwValid = false;
+        $validationMsg = '';
+
+        $result = $this->ValidateForPasswordReset( $_POST['email'], $_POST['telephone'] );
+        $data = $result->fetch_assoc();
+
+        if( strlen($_POST['telephone']) == 10 || strlen($_POST['telephone']) == 9 ){
+
+            if( $data['IsEmailValid'] == 'Available' && $data['IsTelephoneValid'] == 'Available' ){
+                $isEmailValid = true;
+                $isTelephoneNoValid = true;
+            }else{
+                $validationMsg = $validationMsg."* There is no user registered under that email and telephone number.<br/>";
+            }
+
+        }else{
+            $validationMsg = $validationMsg."* Please enter a valid telephone number.<br/>";
+        }
+
+        if( $_POST['password'] == $_POST['confirmedPassword'] ){
+            if( preg_match('/[\'^£$%&*()}{#~?><>,|=_+¬-]/', $_POST['confirmedPassword']) ) {
+                $validationMsg = $validationMsg."* Password contains special characters.<br/>";
+            }else{
+                $isPwValid = true;
+            }
+        }else{
+            $validationMsg = $validationMsg."* Passwords don`t match.<br/>";
+        }
+
+        if( $isTelephoneNoValid && $isEmailValid && $isPwValid ){
+            $this->UpdatePassword( $data['Username'], crypt($_POST['confirmedPassword'], 'This is my password salt!') );
+        }else{
+            echo ("<h4 style=color:red;>Please address following!<br/>".$validationMsg."</h4>");
+        }
+
+    }
+
 }
 
 //'n', 'n', 'n', $_POST['fname'], $_POST['lname'], $_POST['pname'], $_POST['address'], $_POST['gender'], $_POST['dob'], $_POST['email'], $_POST['username'], crypt($_POST['confirmedPassword'], 'This is my password salt!'), 'n', $_POST['nic']

@@ -101,11 +101,11 @@
                     </div> </br>
                     <div class="input-group mb-3">
                         <span class="input-group-addon" id="basic-addon1">Email</span>
-                        <input type="email" name="email" class="form-control" required aria-describedby="basic-addon1">
+                        <input type="email" name="email" required class="form-control" aria-describedby="basic-addon1">
                     </div> </br>
                     <div class="input-group mb-3">
                         <span class="input-group-addon" id="basic-addon1">Telephone</span>
-                        <input type="text" name="telephone" class="form-control" aria-describedby="basic-addon1">
+                        <input type="text" name="telephone" required class="form-control" aria-describedby="basic-addon1">
                     </div> </br>
                     <div class="input-group mb-3">
                         <span class="input-group-addon" id="basic-addon1">Username</span>

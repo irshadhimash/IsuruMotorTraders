@@ -98,12 +98,12 @@
 
         <div class="input-group">
             <span class="input-group-addon">Cost</span>
-            <input type="text" required name="cost" class="form-control" placeholder="Cost" aria-describedby="basic-addon2">
+            <input type="number" required name="cost" class="form-control" placeholder="Cost" aria-describedby="basic-addon2">
         </div> </br>
 
         <div class="input-group">
             <span class="input-group-addon">Sale Price</span>
-            <input type="text" required name="salePrice" class="form-control" placeholder="Sale Price" aria-describedby="basic-addon2">
+            <input type="number" required name="salePrice" class="form-control" placeholder="Sale Price" aria-describedby="basic-addon2">
         </div> </br>
 
 
@@ -126,20 +126,12 @@
 
 <?php
 
-if ( isset($_POST['addVehicleBtn']) ){
+    if ( isset($_POST['addVehicleBtn']) ){
 
-    $inventoryObj = new InventoryController;
+        $inventoryObj = new InventoryController;
+        $inventoryObj->AddVehicle();
 
-    if( $_SESSION['SystemRole'] == 'System Admin' || $_SESSION['SystemRole'] == 'Employee' ){
-        $inventoryObj->addVehicle($_POST['registrationNo'], $_POST['engineNo'], $_POST['vehicleClass'], $_POST['condition'], $_POST['fuelType'],
-                     $_POST['country'], $_POST['make'], $_POST['model'], $_POST['cost'], $_POST['salePrice'], $_SESSION['UserID'], $_POST['availability'], 1);
-    }elseif( $_SESSION['SystemRole'] == 'Trader' ){
-        $inventoryObj->addVehicle($_POST['registrationNo'], $_POST['engineNo'], $_POST['vehicleClass'], $_POST['condition'], $_POST['fuelType'],
-                     $_POST['country'], $_POST['make'], $_POST['model'], $_POST['cost'], $_POST['salePrice'], $_SESSION['UserID'], $_POST['availability'], 0);
     }
-    
-
-}
 
 ?>
 

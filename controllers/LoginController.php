@@ -37,7 +37,11 @@ class LoginController extends LoginModel{
 				$HashedPassword = crypt($this->password, $SALT);
 
 				if( $HashedPassword == $this->user['HashedPassword'] ){
-					$this->signIn();
+					if( $this->user['AccountStatus'] == 'Active' ){
+						$this->signIn();
+					}else{
+						echo ("<script type='text/javascript'> alert('Your account has been deleted. Please contact System Administrator!');</script>");
+					}
 				}else{
 					echo ("<script type='text/javascript'> alert('Incorrect password!');</script>");
 				}

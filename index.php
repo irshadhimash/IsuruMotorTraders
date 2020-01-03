@@ -51,7 +51,7 @@
 				<span>
 					| 
 				</span>
-				<a href="#" class="link" onclick="return openModal()" >
+				<a href="ForgotPassword.php" class="link" onclick="return openModal()" >
 					<span> Forgot password?</span>
 				</a>
 			</div>
