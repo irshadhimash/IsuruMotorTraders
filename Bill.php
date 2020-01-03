@@ -42,6 +42,7 @@ $pdf->AddPage();
 $pdf->SetFont('Times','',12);
 
 $pdf->Cell(0,10, '' ,0,1);
+$pdf->Cell(0,10, 'Customer NIC     :'.$_GET['CxNIC'] ,0,1);
 $pdf->Cell(0,10, 'Vehicle No       :'.$_GET['RegistrationNo'] ,0,1);
 $pdf->Cell(0,10, 'Make             :'.$_GET['Make'] ,0,1);
 $pdf->Cell(0,10, 'Model            :'.$_GET['Model'] ,0,1);

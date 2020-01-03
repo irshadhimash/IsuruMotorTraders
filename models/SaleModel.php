@@ -30,18 +30,19 @@ class SaleModel extends DBModel{
         }else{
             $sqlQuery = "call UPDATEVEHICLEAVAILABILITY('$RegNo')";
             $connection->query($sqlQuery);
+            $connection->next_result();
         }
 
     }
 
-    function create( $vehicleNo, $userId, $price, $paymentMethod, $InitialPayment ){
+    function create( $vehicleNo, $userId, $price, $paymentMethod, $InitialPayment, $cxNIC ){
 
         $connection = $this->initDBConnection();
 
 		if($connection->connect_error){
 			echo "Cannot connect to the database:".$connection->connect_error;
         }else{
-            $sqlQuery = "call CREATESALE('$vehicleNo', $userId, $price, '$paymentMethod', $InitialPayment)";
+            $sqlQuery = "call CREATESALE('$vehicleNo', $userId, $price, '$paymentMethod', $InitialPayment, '$cxNIC')";
             $connection->query($sqlQuery);
         }
 

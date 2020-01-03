@@ -90,6 +90,10 @@
                                         <input type="number" name="SalePrice" required class="form-control" aria-describedby="basic-addon1" value='.$row['SalePrice'].' />
                                     </div> </br>';
                                     echo '<div class="input-group mb-3">
+                                        <span class="input-group-addon" id="basic-addon1">Customer NIC</span>
+                                        <input type="text" name="cxNIC" required class="form-control" aria-describedby="basic-addon1" />
+                                    </div> </br>';
+                                    echo '<div class="input-group mb-3">
                                         <span class="input-group-addon" id="basic-addon1">Payment Method</span>
                                         <select name="paymentMethod" class="form-control"> <option value="Cash"> Cash </option> <option value="Installment"> Installments - 12 Months </option> </select>
                                     </div> </br>';
@@ -109,8 +113,7 @@
                             if ( isset($_POST['generateBtn']) ){
 
                                 $saleObj = new AddSaleController;
-                                $saleObj->updateAvailability( $_SESSION['RegistrationNo'] );
-                                $saleObj->createSale( $_SESSION['RegistrationNo'], $_SESSION['UserID'], $_POST['SalePrice'], $_POST['paymentMethod'], $_POST['InitialPayment'] );
+                                $saleObj->createSale();
 
                             }
 

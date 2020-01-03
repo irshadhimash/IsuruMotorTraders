@@ -19,7 +19,7 @@
     <!-- Main App Style -->
 	 <link rel="stylesheet" href="css/AppTheme_Main.css">
 
-    <title>System Users - Isuru Motor Traders</title>
+    <title>Customers - Isuru Motor Traders</title>
 
 </head>
 
@@ -33,35 +33,22 @@
 
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <?php
-                    if ( $_SESSION['SystemRole'] == 'System Admin' || $_SESSION['SystemRole'] == 'Employee' ){ 
-                        echo ("
-                        <li class='breadcrumb-item'><a href='home.php'>Home</a></li>");
-                    }elseif( $_SESSION['SystemRole'] == 'Trader' ){
-                        echo ("
-                        <li class='breadcrumb-item'><a href='TraderPortal.php'>Home</a></li>");
-                    }elseif( $_SESSION['SystemRole'] == 'Customer' ){
-                        echo ("
-                        <li class='breadcrumb-item'><a href='CustomerPortal.php'>Home</a></li>");
-                    }
-                ?>
-                <li class='breadcrumb-item'><a href='SystemConfiguration.php'>System Configuration</a></li>
-                <li class="breadcrumb-item active" aria-current="page">System Users</li>
+                <li class="breadcrumb-item"><a href="home.php">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Customers</li>
             </ol>
         </nav>
 
-        <a href='CreateUser.php'> <h2><span class='fas fa-plus'></span> Add User</h2> </a>
-        <h2>Below are the users in the system. Click on a user change its labels.</h2>
+        <h2>Below is the list of your customers. Click on a customer to see vehicles purchased by them.</h2>
         <br/>
         <div class='col-lg-3'>
         </div>
         <?php
                     
                 $userObj = new UserController;
-                $resultSet = $userObj->GetAllUsers();
+                $resultSet = $userObj->GetAllCustomers();
 
                 while($row = $resultSet->fetch_assoc()){
-                    $userId = $row['UserId'];
+                    $cxId = $row['UserId'];
                     $AccountStatusIcon = '';
                     if( $row['AccountStatus'] == 'Active' ){
                         $AccountStatusIcon = 'success';
@@ -74,15 +61,15 @@
                                 <img src='fontawesome/svgs/solid/user.svg' class='mr-3' alt='...' width='30px' height='30px'>
                                 <div class='media-body'>
                                     <h5 class='mt-0'>
-                                        <a href='SystemUserDetail.php?UserId=$userId'>".$row['PreferedName']."</a>
+                                        <a href='CustomerInventory.php?cxId=$cxId&Name=".$row['PreferedName']."'> ".$row['PreferedName']." </a>
                                         <span class='badge badge-pill badge-".$AccountStatusIcon."'>".$row['AccountStatus']."!</span>
                                     </h5>
-                                    <p>".$row['Role']."</p>
+                                    <p>".$row['NIC']."</p>
+                                    <p>".$row['Address']."</p>
+                                    <p>".$row['Email']."</p>
                                     <p>".$row['Telephone']."</p>");
-                                    if( $_SESSION['UserRole'] == 'Admin' && $row['AccountStatus'] == 'Active' ){
-                                        if( $userId != $_SESSION['UserID'] ){
-                                            echo "<p><a href='DeleteUser.php?id=$userId&Name=".$row['PreferedName']."&ReturnURL=SystemUser.php'><button name='deleteBtn' value='Delete' class='btn btn-danger'> <span class='fas fa-trash-alt'></span> Delete User </button> </a></p>";
-                                        }
+                                    if( $_SESSION['UserRole'] == 'Admin' ){
+                                        echo "<p><a href='DeleteUser.php?cxId=$cxId&Name=".$row['PreferedName']."&ReturnURL=Customers.php'><button name='deleteBtn' value='Delete Trader' class='btn btn-danger'> <span class='fas fa-trash-alt'></span> Delete Customer </button> </a></p>";
                                     }
                     echo ("
                                 </div>

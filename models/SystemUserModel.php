@@ -40,7 +40,32 @@ class SystemUserModel extends DBModel{
 		
 	}
 
-    function create( $istrader, $iscustomer, $isemployee, $firstname, $lastname, $preferedname, $address, $gender, $DOB, $email, $username, $hashedpw, $isadmin ){
+	function CheckUsernameAvailability( $Username ){
+		
+        $connection = $this->initDBConnection();
+
+        if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+		}else{
+            
+			$sqlQuery = "call GETUSERFORLOGIN('$Username') ";
+			$resultSet = $connection->query($sqlQuery);
+			$user = $resultSet->fetch_assoc();
+
+            $resultSet->close();
+            $connection->next_result();
+
+            if ($user['Username'] == null | $user['Username'] == ''){
+				return true;
+            }else{
+                return false;
+            }
+
+        }
+
+	}
+	
+    function create( $istrader, $iscustomer, $isemployee, $firstname, $lastname, $preferedname, $address, $gender, $DOB, $email, $username, $hashedpw, $isadmin, $nic ){
 
         $connection = $this->initDBConnection();
 
@@ -50,14 +75,13 @@ class SystemUserModel extends DBModel{
 
 		}else{
 
-			$sqlQuery = "call CREATEUSER( '$istrader', '$iscustomer', '$isemployee', '$firstname', '$lastname', '$preferedname', '$address', '$gender', '$DOB', '$email', '$username', '$hashedpw', '$isadmin')";
+			$sqlQuery = "call CREATEUSER( '$istrader', '$iscustomer', '$isemployee', '$firstname', '$lastname', '$preferedname', '$address', '$gender', '$DOB', '$email', '$username', '$hashedpw', '$isadmin', '$nic')";
 			if ( $connection->query($sqlQuery) == true ){
 				$connection->close();
-				return 'success';
+				header('Location:SystemUser.php');
 			}else{
 				echo "Error in: " . $sqlQuery . "<br>" . $connection->error;
 				$connection->close();
-				return 'failed';
 			}
 
         }
@@ -72,6 +96,21 @@ class SystemUserModel extends DBModel{
 			echo "Cannot connect to the database:".$connection->connect_error;
         }else{
             $sqlQuery = "call GetAllTraders()";
+            $result = $connection->query($sqlQuery);
+        }
+
+        $connection->close();
+        return $result;
+	}
+
+	function GetCustomers(){
+
+		$connection = $this->initDBConnection();
+
+		if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call GetAllCustomers()";
             $result = $connection->query($sqlQuery);
         }
 

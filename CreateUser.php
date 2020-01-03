@@ -4,10 +4,7 @@
     $settingObj = new UserController;
 
     if( isset($_POST['addBtn']) ){
-
-        $settingObj = new SettingController;
         $settingObj->AddUser();
-
     }
 
 ?>
@@ -72,10 +69,6 @@
                         </select>
                     </div> </br>
                     <div class="input-group mb-3">
-                        <span class="input-group-addon" id="basic-addon1">Username</span>
-                        <input type="text" name="username" class="form-control" aria-describedby="basic-addon1">
-                    </div> </br>
-                    <div class="input-group mb-3">
                         <span class="input-group-addon" id="basic-addon1">NIC</span>
                         <input type="text" name="nic" class="form-control" required aria-describedby="basic-addon1">
                     </div> </br>
@@ -108,11 +101,23 @@
                     </div> </br>
                     <div class="input-group mb-3">
                         <span class="input-group-addon" id="basic-addon1">Email</span>
-                        <input type="text" name="email" class="form-control" required aria-describedby="basic-addon1">
+                        <input type="email" name="email" class="form-control" required aria-describedby="basic-addon1">
                     </div> </br>
                     <div class="input-group mb-3">
                         <span class="input-group-addon" id="basic-addon1">Telephone</span>
                         <input type="text" name="telephone" class="form-control" aria-describedby="basic-addon1">
+                    </div> </br>
+                    <div class="input-group mb-3">
+                        <span class="input-group-addon" id="basic-addon1">Username</span>
+                        <input type="text" name="username" class="form-control" required aria-describedby="basic-addon1">
+                    </div> </br>
+                    <div class="input-group mb-3">
+                        <span class="input-group-addon" id="basic-addon1">Password</span>
+                        <input type="password" name="password" class="form-control" required aria-describedby="basic-addon1">
+                    </div> </br>
+                    <div class="input-group mb-3">
+                        <span class="input-group-addon" id="basic-addon1">Confirm Password</span>
+                        <input type="password" name="confirmedPassword" class="form-control" required aria-describedby="basic-addon1">
                     </div> </br>
                     <div class="input-group">
                         <button type="submit" name="addBtn" class="btn btn-success">

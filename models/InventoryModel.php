@@ -124,6 +124,21 @@ class InventoryModel extends DBModel{
         return $result;
     }
 
+    function GetVehicleByCustomerId( $UserId ){
+
+        $connection = $this->initDBConnection();
+
+		if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call GetVehicleByListedUserId($UserId)";
+            $result = $connection->query($sqlQuery);
+        }
+
+        $connection->close();
+        return $result;
+    }
+
     function markVehicleAsInterested( $vehicleID, $userId, $UserName ){
 
         $connection = $this->initDBConnection();

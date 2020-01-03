@@ -49,10 +49,10 @@
     <div class="col-lg-2 text-center">
         <div class="list-group">
             <a href="SystemModule.php" class="list-group-item list-group-item-action list-group-item-info">System Module Label Replacements</a>
-            <a href="SystemRole.php" class="list-group-item list-group-item-action list-group-item-info">System Roles</a>
             <a href="SystemUser.php" class="list-group-item list-group-item-action list-group-item-info">System Users</a>
+            <!--<a href="SystemRole.php" class="list-group-item list-group-item-action list-group-item-info">System Roles</a>
             <a href="SystemUser.php" class="list-group-item list-group-item-action list-group-item-info">Link Role Modules</a>
-            <a href="SystemUser.php" class="list-group-item list-group-item-action list-group-item-info">Link User Roles</a>
+            <a href="SystemUser.php" class="list-group-item list-group-item-action list-group-item-info">Link User Roles</a>-->
         </div>
     </div>
     <div class="col-lg-10 text-left">

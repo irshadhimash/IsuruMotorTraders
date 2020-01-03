@@ -8,7 +8,7 @@ $vehicleId = $_GET['id'];
 if( isset($_POST['deleteUserBtn']) ){
 
     $inventoryObj = new UserController;
-    $inventoryObj->deleteUser($_GET['id']);
+    $inventoryObj->deleteUser($_GET['id'], $_GET['ReturnURL']);
 }
 
 ?>
@@ -45,14 +45,12 @@ if( isset($_POST['deleteUserBtn']) ){
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="Home.php">Home</a></li>
-                <li class="breadcrumb-item"><a href="Traders.php">Traders</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Delete User</li>
             </ol>
         </nav>
 
         <form method="POST" action="#">
             <h2> Confirm that you really need to delete the user <em> <?php echo $_GET['Name'] ?> </em> </h2>
-            <a href="inventory.php"> Go back! </a>
             <input type="submit" name="deleteUserBtn" value="Delete!" class="btn btn-danger"/>
         </form>
 

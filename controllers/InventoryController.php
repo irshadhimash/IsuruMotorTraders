@@ -35,6 +35,10 @@ class InventoryController extends InventoryModel{
 
     }
 
+    function GetVehiclePurchasedByCustomer( $UserId ){
+        return $this->GetVehicleByCustomerId( $UserId );
+    }
+
     function updateVehicle($registrationNo, $engineNo, $vehicleClass, $condition, $fuelType, $country, $make, $model, $cost, $salePrice, $UserId, $availability){
 
         $this->update($registrationNo, $engineNo, $vehicleClass, $condition, $fuelType, $country, $make, $model, $cost, $salePrice, $UserId, $availability);

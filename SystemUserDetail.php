@@ -54,7 +54,7 @@
             </ol>
         </nav>
 
-        <h2>Details of <em><?php echo $user['Username']; ?></em></h2>
+        <h2>Details of <em><?php echo $user['PreferedName']; ?></em></h2>
         <br/>
         <div class='col-lg-3'>
         </div>
