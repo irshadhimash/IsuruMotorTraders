@@ -17,11 +17,12 @@ class InventoryModel extends DBModel{
             $sqlQuery = "call CREATEVEHICLE('$RegistrationNo', '$EngineNo', '$VehicleClass', '$Status',
                          '$FuelType', '$Country', '$Make', '$Model', '$Cost', '$SalePrice', $UserId, '$Availability', $isPurchased)";
             if ( $connection->query($sqlQuery) == true ){
-                if ( $_SESSION['SystemRole'] == 'System Admin' || $_SESSION['SystemRole'] == 'Employee' ){ 
+                /*if ( $_SESSION['SystemRole'] == 'System Admin' || $_SESSION['SystemRole'] == 'Employee' ){ 
                     header('location:inventory.php');
                 }elseif( $_SESSION['SystemRole'] == 'Trader' ){
                     header('location:TraderPortal.php');
-                }
+                }*/
+                echo ("<script type='text/javascript'> alert('Vehicle has been added successfully!');</script>");
             }else{
                 echo "Error in: " . $sqlQuery . "<br>" . $connection->error;
             }
@@ -131,7 +132,7 @@ class InventoryModel extends DBModel{
 		if($connection->connect_error){
 			echo "Cannot connect to the database:".$connection->connect_error;
         }else{
-            $sqlQuery = "call GetVehicleByListedUserId($UserId)";
+            $sqlQuery = "call GetVehicleByCustomerId($UserId)";
             $result = $connection->query($sqlQuery);
         }
 

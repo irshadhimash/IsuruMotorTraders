@@ -10,6 +10,10 @@ class InstallmentPaymentController extends InstallmentPaymentModel{
         return $this->getAllInstallmentPlanVehicles();
     }
 
+    function search(){
+        return $this->GetInstallmentsByRegNo( $_POST['RegNoTxt'] );
+    }
+
     function payInstallment(){
         $this->createPayment($saleId, $amount);
     }

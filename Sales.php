@@ -46,6 +46,7 @@
             <th>Vehicle Registration No</th>
             <th>Sold For</th>
             <th>Payment Method</th>
+            <th>Customer NIC</th>
             <th>Actions</th>
         </tr>
 
@@ -61,6 +62,7 @@
                     echo "<td>"; echo $row['VehicleNo']; echo "</td>";
                     echo "<td>"; echo $row['SalePrice']; echo "</td>";
                     echo "<td>"; echo $row['PaymentMethod']; echo "</td>";
+                    echo "<td>"; echo $row['CustomerNIC']; echo "</td>";
                     echo "<td>";
                     if( $_SESSION['UserRole'] == 'Admin' ){
                         echo "<a href='ReverseSale.php?id=".$row['SaleID']."&RegNo=".$row['VehicleNo']."'><input type='submit' name='reverseBtn' value='Reverse' class='btn btn-danger' /> </a>";

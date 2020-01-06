@@ -48,6 +48,24 @@
             </ol>
         </nav>
 
+        <form method="post" action="#">
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group mb-3">
+                        <span class="input-group-addon" id="basic-addon1">Registration No</span>
+                        <input type="text" name="RegNoTxt" class="form-control" placeholder="Format xx-xxxx" aria-describedby="basic-addon1">
+                    </div> </br>
+
+                    <div class="input-group">
+                        <button type="submit" name="searchBtn" value="Search" class="btn btn-success">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"> Search</span>
+                        </button>
+                    </div> </br>
+                </div>
+            </div>
+
+        </form>
         <table class="table" id="installmentsTable">
             <legend>Vehicles sold under installment plan. Click on a vehicle to view details and proceed to payment.</legend>
             <tr>
@@ -62,19 +80,39 @@
             <?php
                 
             $installmentObj = new InstallmentPaymentController;
-            $resultSet = $installmentObj->getAllInstallments();
 
-            while($row = $resultSet->fetch_assoc()){
-                echo "<tr>";
-                    echo "<td>"; echo "<a href='MakePayment.php?id=".$row['SaleID']."&RegNo=".$row['VehicleNo']."&TotalLeft=".($row['TotalAfterInitial'] - $row['TotalInstallmentsPaid'])."' target='_blank'>".$row['VehicleNo']."</a>"; echo "</td>";
-                    echo "<td>"; echo $row['SalePrice']; echo "</td>";
-                    echo "<td>"; echo $row['InitialPayment']; echo "</td>";
-                    echo "<td>"; echo ( 12 - $row['NoOfPayments'] ) ; echo "</td>";
-                    echo "<td>"; echo $row['TotalAfterInitial'] - $row['TotalInstallmentsPaid'] ; echo "</td>";
-                    echo "<td>"; echo "12 Months"; echo "</td>";
-                    echo "<td>"; echo ($row['TotalAfterInitial'] - $row['TotalInstallmentsPaid']) / ( 12 - $row['NoOfPayments'] ) ; echo "</td>";
-                echo "</tr>";
+            if( isset($_POST['searchBtn'] ) ){
+                $resultSet = $installmentObj->search();
+                
+                while($row = $resultSet->fetch_assoc()){
+                    echo "<tr>";
+                        echo "<td>"; echo "<a href='MakePayment.php?id=".$row['SaleID']."&RegNo=".$row['VehicleNo']."&TotalLeft=".($row['TotalAfterInitial'] - $row['TotalInstallmentsPaid'])."' target='_blank'>".$row['VehicleNo']."</a>"; echo "</td>";
+                        echo "<td>"; echo $row['SalePrice']; echo "</td>";
+                        echo "<td>"; echo $row['InitialPayment']; echo "</td>";
+                        echo "<td>"; echo ( 12 - $row['NoOfPayments'] ) ; echo "</td>";
+                        echo "<td>"; echo $row['TotalAfterInitial'] - $row['TotalInstallmentsPaid'] ; echo "</td>";
+                        echo "<td>"; echo "12 Months"; echo "</td>";
+                        echo "<td>"; echo ($row['TotalAfterInitial'] - $row['TotalInstallmentsPaid']) / ( 12 - $row['NoOfPayments'] ) ; echo "</td>";
+                    echo "</tr>";
+                }
+
+            }else{
+                $resultSet = $installmentObj->getAllInstallments();
+
+                while($row = $resultSet->fetch_assoc()){
+                    echo "<tr>";
+                        echo "<td>"; echo "<a href='MakePayment.php?id=".$row['SaleID']."&RegNo=".$row['VehicleNo']."&TotalLeft=".($row['TotalAfterInitial'] - $row['TotalInstallmentsPaid'])."' target='_blank'>".$row['VehicleNo']."</a>"; echo "</td>";
+                        echo "<td>"; echo $row['SalePrice']; echo "</td>";
+                        echo "<td>"; echo $row['InitialPayment']; echo "</td>";
+                        echo "<td>"; echo ( 12 - $row['NoOfPayments'] ) ; echo "</td>";
+                        echo "<td>"; echo $row['TotalAfterInitial'] - $row['TotalInstallmentsPaid'] ; echo "</td>";
+                        echo "<td>"; echo "12 Months"; echo "</td>";
+                        echo "<td>"; echo ($row['TotalAfterInitial'] - $row['TotalInstallmentsPaid']) / ( 12 - $row['NoOfPayments'] ) ; echo "</td>";
+                    echo "</tr>";
+                }
+
             }
+                
             
             ?>
         </table>

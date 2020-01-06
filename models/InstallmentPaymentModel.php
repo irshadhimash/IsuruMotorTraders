@@ -20,6 +20,22 @@ class InstallmentPaymentModel extends DBModel{
         
     }
 
+    function GetInstallmentsByRegNo( $RegNo ){
+
+        $connection = $this->initDBConnection();
+
+		if($connection->connect_error){
+			echo "Cannot connect to the database:".$connection->connect_error;
+        }else{
+            $sqlQuery = "call GetInstallmentsByRegNo( '$RegNo' )";
+            $result = $connection->query($sqlQuery);
+        }
+
+        return $result;
+        $connection->close();
+
+    }
+
     function getInstallmentDetailsByItem($saleId){
 
         $connection = $this->initDBConnection();
